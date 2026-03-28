@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POS — Sign In</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0d0d0d;--ink2:#3a3a3a;--ink3:#888;
+  --paper:#fafaf8;--surface:#fff;
+  --accent:#c8f55a;--accent-ink:#1a2800;
+  --red:#ff4757;--green:#2ed47a;
+  --border:rgba(0,0,0,.08);
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+  --r:14px;--r-sm:8px;
+}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--paper);
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.left-panel{
+  background:var(--ink);
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  padding:3rem;
+  position:relative;overflow:hidden;
+}
+.left-panel::before{
+  content:'';position:absolute;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(200,245,90,.15) 0%,transparent 70%);
+  top:-100px;left:-100px;pointer-events:none;
+}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:#fff;letter-spacing:-.02em;}
+.brand span{color:var(--accent);}
+.hero-text{
+  position:relative;z-index:1;
+}
+.hero-text h1{
+  font-family:'Syne',sans-serif;font-weight:700;
+  font-size:3rem;line-height:1.1;color:#fff;
+  letter-spacing:-.03em;margin-bottom:1rem;
+}
+.hero-text h1 em{color:var(--accent);font-style:normal;}
+.hero-text p{color:rgba(255,255,255,.5);font-size:1rem;line-height:1.6;max-width:340px;}
+.feature-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:2rem;}
+.pill{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.7);font-size:.78rem;padding:6px 14px;border-radius:100px;
+}
+.left-footer{color:rgba(255,255,255,.3);font-size:.78rem;}
+
+.right-panel{
+  display:flex;align-items:center;justify-content:center;padding:2rem;
+}
+.auth-box{width:100%;max-width:400px;}
+.auth-title{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:1.8rem;
+  color:var(--ink);margin-bottom:.5rem;letter-spacing:-.02em;
+}
+.auth-sub{color:var(--ink3);font-size:.9rem;margin-bottom:2rem;}
+
+.status-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:100px;font-size:.78rem;font-weight:500;
+  margin-bottom:1.5rem;border:1px solid;
+}
+.status-badge.online{background:rgba(46,212,122,.1);color:#1a7a4a;border-color:rgba(46,212,122,.3);}
+.status-badge.offline{background:rgba(255,71,87,.1);color:#c0392b;border-color:rgba(255,71,87,.3);}
+.status-badge.checking{background:rgba(136,136,136,.1);color:var(--ink3);border-color:var(--border);}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.dot.pulse{animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.form-group{margin-bottom:1rem;}
+label{display:block;font-size:.82rem;font-weight:500;color:var(--ink2);margin-bottom:6px;}
+input{
+  width:100%;padding:12px 14px;
+  border:1.5px solid var(--border);border-radius:var(--r-sm);
+  font-size:.95rem;font-family:'DM Sans',sans-serif;
+  background:var(--surface);color:var(--ink);
+  transition:border .15s;outline:none;
+}
+input:focus{border-color:var(--ink);}
+
+.btn{
+  width:100%;padding:13px;border-radius:var(--r-sm);border:none;
+  font-size:.95rem;font-weight:500;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-dark{background:var(--ink);color:#fff;}
+.btn-dark:hover{background:#222;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+.error-msg{
+  background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.2);
+  color:var(--red);border-radius:var(--r-sm);padding:10px 14px;
+  font-size:.85rem;margin-top:1rem;display:none;
+}
+.spinner{
+  width:18px;height:18px;border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.demo-hint{
+  margin-top:1.5rem;padding:1rem;background:var(--paper);
+  border-radius:var(--r-sm);border:1px solid var(--border);
+}
+.demo-hint p{font-size:.78rem;color:var(--ink3);margin-bottom:6px;}
+.demo-hint code{font-size:.78rem;background:#eee;padding:2px 6px;border-radius:4px;}
+
+@media(max-width:768px){
+  body{grid-template-columns:1fr;}
+  .left-panel{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="left-panel">
+  <div class="brand">●&thinsp;POS<span>.</span></div>
+  <div class="hero-text">
+    <h1>Sell smarter,<br>track <em>everything.</em></h1>
+    <p>Cloud-powered point of sale with real-time inventory, loyalty rewards, and beautiful receipts.</p>
+    <div class="feature-pills">
+      <span class="pill">⚡ Real-time sync</span>
+      <span class="pill">📱 Mobile scanner</span>
+      <span class="pill">⭐ Loyalty points</span>
+      <span class="pill">📊 Analytics</span>
+      <span class="pill">🖨 Receipt printing</span>
+    </div>
+  </div>
+  <div class="left-footer">© 2025 POS System. All rights reserved.</div>
+</div>
+
+<div class="right-panel">
+  <div class="auth-box">
+    <div class="auth-title">Welcome back</div>
+    <div class="auth-sub">Sign in to your POS account</div>
+    
+    <div class="status-badge checking" id="db-status">
+      <div class="dot pulse"></div>
+      <span>Checking connection...</span>
+    </div>
+
+    <div class="form-group">
+      <label>Email address</label>
+      <input type="email" id="email" placeholder="you@store.com" autocomplete="email" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()" />
+    </div>
+    <button class="btn btn-dark" onclick="login()" id="login-btn">Sign in</button>
+    <div class="error-msg" id="error-msg"></div>
+
+    <div class="demo-hint">
+      <p><strong>First time setup?</strong> Create users in Supabase Dashboard → Authentication → Users</p>
+      <p>Admin: email containing <code>admin</code> gets full access</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL = 'https://uktfqjrzbyycszcjmikz.supabase.co';
+const SUPA_KEY = '__SUPABASE_ANON_KEY__';
+
+const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+async function checkConnection(){
+  const badge = document.getElementById('db-status');
+  try {
+    const {error} = await sb.from('business_profile').select('id').limit(1);
+    if(error && error.code !== 'PGRST116'){throw error;}
+    badge.className = 'status-badge online';
+    badge.innerHTML = '<div class="dot"></div><span>Database connected</span>';
+  } catch(e){
+    badge.className = 'status-badge offline';
+    badge.innerHTML = '<div class="dot"></div><span>Connection failed — check anon key</span>';
+  }
+}
+
+async function login(){
+  const email = document.getElementById('email').value.trim();
+  const pass = document.getElementById('password').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('error-msg');
+  err.style.display = 'none';
+  if(!email||!pass){showError('Please enter email and password.');return;}
+  btn.innerHTML = '<div class="spinner"></div>Signing in...';
+  btn.disabled = true;
+  const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
+  if(error){showError(error.message);btn.innerHTML='Sign in';btn.disabled=false;return;}
+  window.location.href='pos.html';
+}
+
+function showError(msg){
+  const e = document.getElementById('error-msg');
+  e.textContent = msg;e.style.display='block';
+}
+
+// Check if already logged in
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(session) window.location.href='pos.html';
+  checkConnection();
+})();
+</script>
+</body>
+</html>
