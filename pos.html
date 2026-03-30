@@ -1671,6 +1671,39 @@
       font-size: .8rem;
     }
 
+    /* ══ REPORTS ══ */
+    .rtab-body{} 
+    .r-stat-bar{height:6px;border-radius:3px;background:var(--border2);overflow:hidden;margin-top:4px;}
+    .r-stat-fill{height:100%;border-radius:3px;background:var(--ink);transition:width .4s;}
+    [data-theme=dark] .r-stat-fill{background:var(--accent);}
+
+    /* ══ EXPIRY BADGE ══ */
+    .exp-badge{position:absolute;bottom:4px;left:4px;background:rgba(255,176,32,.9);color:#4a2800;font-size:.58rem;padding:1px 5px;border-radius:3px;font-weight:700;}
+    .exp-badge.critical{background:rgba(255,71,87,.9);color:#fff;}
+    .pcard{position:relative;}
+
+    /* ══ VOICE ══ */
+    .voice-active{animation:vp 1s ease-in-out infinite;}
+    @keyframes vp{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,71,87,.4);}50%{transform:scale(1.05);box-shadow:0 0 0 10px rgba(255,71,87,0);}}
+    .voice-match{padding:7px 10px;border:1.5px solid var(--border2);border-radius:var(--r-sm);margin-bottom:5px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:.83rem;transition:all .15s;}
+    .voice-match:hover{border-color:var(--ink);background:var(--surface2);}
+
+    /* ══ SPLIT PAY ══ */
+    .split-line{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;margin-bottom:6px;}
+    .split-line select{width:auto;padding:7px 9px;font-size:.8rem;}
+    .split-line input{padding:7px 10px;font-size:.8rem;}
+
+    /* ══ CASH CHANGE ══ */
+    .change-positive{background:rgba(46,212,122,.1);border:1px solid rgba(46,212,122,.25);border-radius:var(--r-sm);}
+    .change-positive #cash-change-lbl{color:#1a7a4a;}
+    .change-positive #cash-change-amt{color:#1a7a4a;}
+    .change-negative{background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.2);border-radius:var(--r-sm);}
+    .change-negative #cash-change-lbl{color:var(--red);}
+    .change-negative #cash-change-amt{color:var(--red);}
+
+    /* ══ CREDIT LEDGER ══ */
+    .credit-badge{background:rgba(255,71,87,.1);color:var(--red);border:1px solid rgba(255,71,87,.2);border-radius:4px;font-size:.68rem;padding:1px 6px;font-weight:600;}
+
     /* ══ PRINT SIZES ══ */
     @media print {
       body {
@@ -1791,6 +1824,7 @@
           <path
             d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
         </svg><span class="lbl">Settings</span></button>
+      <button class="tnav-btn admin-only" data-page="reports" onclick="go('reports')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg><span class="lbl">Reports</span></button>
     </div>
     <div class="t-right">
       <div class="db-pill wait" id="db-pill">
@@ -1851,7 +1885,9 @@
       <div class="pos-r">
         <div class="cart-hd">
           <div class="cart-title">Cart <span class="cart-cnt" id="cart-cnt">0</span></div>
-          <div style="display:flex;gap:5px;">
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-xs" onclick="openM('voice-ov');initVoice()" title="Voice billing">🎤</button>
+            <button class="btn btn-ghost btn-xs" onclick="openSplitPay()" title="Split payment">↔</button>
             <button class="btn btn-ghost btn-xs" onclick="applyVoucher()" title="Redeem voucher">🎁</button>
             <button class="btn btn-ghost btn-xs" onclick="claimPoints()" title="Redeem points">⭐</button>
             <button class="btn btn-ghost btn-xs" onclick="clearCart()">Clear</button>
@@ -1903,7 +1939,8 @@
           <div class="pts-row" id="pts-earn-row"></div>
           <div style="font-size:.72rem;color:var(--ink3);margin-bottom:4px;margin-top:7px;">Payment method</div>
           <div class="payment-select" id="pay-sel"></div>
-          <button class="ckbtn" id="ck-btn" onclick="checkout()">Complete Sale →</button>
+          <button class="ckbtn" id="ck-btn" onclick="checkoutFlow()">Complete Sale →</button>
+          <button class="btn btn-ghost btn-full" style="margin-top:5px;font-size:.75rem;" onclick="openWAReceipt()">📱 Send via WhatsApp</button>
         </div>
       </div>
     </div>
@@ -2010,6 +2047,8 @@
       </div>
     </div>
     <div class="toolbar">
+      <div class="iw" style="flex:1;min-width:160px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="sales-q" placeholder="Search invoice, customer..." oninput="filterSalesTable()"></div>
+      <button class="btn btn-ghost btn-xs" onclick="document.getElementById('sales-q').value='';filterSalesTable()">✕</button>
       <input type="date" id="sf" style="width:auto;padding:7px 10px;">
       <input type="date" id="st" style="width:auto;padding:7px 10px;">
       <select id="ss" style="width:auto;">
@@ -2018,7 +2057,7 @@
         <option value="refunded">Refunded</option>
       </select>
       <button class="btn btn-dark btn-sm" onclick="loadSales()">Filter</button>
-      <button class="btn btn-ghost btn-sm" onclick="sf.value=st.value='';loadSales()">Clear</button>
+      <button class="btn btn-ghost btn-sm" onclick="sf.value=st.value='';document.getElementById('sales-q').value='';loadSales()">Clear</button>
       <span id="sales-sum" style="font-size:.75rem;color:var(--ink3);margin-left:auto;"></span>
     </div>
     <div class="tw">
@@ -2051,6 +2090,11 @@
         <button class="btn btn-dark btn-sm" onclick="openVM()">+ Create Voucher</button>
       </div>
     </div>
+    <div class="toolbar" style="margin-bottom:1rem;">
+      <div class="iw" style="flex:1;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="vchr-q" placeholder="Search voucher code..." oninput="filterVouchers()"></div>
+      <button class="btn btn-ghost btn-xs" onclick="document.getElementById('vchr-q').value='';filterVouchers()">✕</button>
+      <select id="vchr-f" onchange="filterVouchers()" style="width:auto;"><option value="">All</option><option value="active">Active</option><option value="used">Used</option></select>
+    </div>
     <div class="tw">
       <table>
         <thead>
@@ -2059,7 +2103,7 @@
             <th>Value</th>
             <th>Balance</th>
             <th>Status</th>
-            <th class="hm">Issued</th>
+            <th class="hm">Notes</th>
             <th class="hm">Expires</th>
             <th>Actions</th>
           </tr>
@@ -2173,6 +2217,7 @@
       <button class="tab-item" onclick="stab(this,'st-customer')">Customer Types</button>
       <button class="tab-item" onclick="stab(this,'st-print')">Printing</button>
       <button class="tab-item" onclick="stab(this,'st-sugar')">Sugar Items</button>
+      <button class="tab-item" onclick="stab(this,'st-notifications')">Notifications</button>
     </div>
 
     <div id="st-business" class="stab-body" style="max-width:700px;">
@@ -2281,7 +2326,286 @@
     </div>
   </div>
 
+  <div id="st-notifications" class="stab-body" style="display:none;max-width:700px;">
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">SMS Notifications</div>
+        <p style="font-size:.82rem;color:var(--ink3);margin-bottom:.85rem;">Configure SMS API to send receipts to customers via SMS. Paste your API endpoint and key.</p>
+        <div class="fg"><label>SMS API URL</label><input type="text" id="sms-api-url" placeholder="https://api.smsgateway.lk/send..."></div>
+        <div class="fg"><label>API Key</label><input type="text" id="sms-api-key" placeholder="Your API key..."></div>
+        <div class="fg"><label>Sender ID</label><input type="text" id="sms-sender" placeholder="MYSHOP"></div>
+        <div class="fg"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="sms-auto" style="width:auto;"> Auto-send SMS receipt after each sale</label></div>
+        <button class="btn btn-dark btn-sm" onclick="saveSettings()">Save SMS Settings</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Email Notifications</div>
+        <p style="font-size:.82rem;color:var(--ink3);margin-bottom:.85rem;">Configure email API (e.g. SendGrid, Mailgun) to email receipts automatically.</p>
+        <div class="fg"><label>Email API URL</label><input type="text" id="email-api-url" placeholder="https://api.sendgrid.com/..."></div>
+        <div class="fg"><label>API Key</label><input type="text" id="email-api-key" placeholder="SG.xxxxxxxxxx"></div>
+        <div class="fg"><label>From Email</label><input type="email" id="email-from" placeholder="noreply@myshop.com"></div>
+        <div class="fg"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="email-auto" style="width:auto;"> Auto-send email receipt after each sale</label></div>
+        <button class="btn btn-dark btn-sm" onclick="saveSettings()">Save Email Settings</button>
+        <div class="divider"></div>
+        <p style="font-size:.75rem;color:var(--ink3);">💡 For WhatsApp receipts: Use the 📱 WhatsApp button in the cashier cart — no API key needed (uses wa.me links).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ REPORTS PAGE ═══ -->
+  <div id="page-reports" class="page">
+    <div class="page-hd">
+      <div class="ph-left"><div class="page-title">Reports</div><div class="page-sub">All business reports — filter, view & download</div></div>
+    </div>
+    <div class="tab-bar" style="max-width:900px;">
+      <button class="tab-item active" onclick="rtab(this,'rpt-sales')">📊 Sales</button>
+      <button class="tab-item" onclick="rtab(this,'rpt-inventory')">📦 Inventory</button>
+      <button class="tab-item" onclick="rtab(this,'rpt-customers')">👥 Customers</button>
+      <button class="tab-item" onclick="rtab(this,'rpt-products')">🏆 Products</button>
+      <button class="tab-item" onclick="rtab(this,'rpt-payment')">💳 Payments</button>
+      <button class="tab-item" onclick="rtab(this,'rpt-zreport')">📋 Z-Report</button>
+      <button class="tab-item" onclick="rtab(this,'rpt-expenses')">💸 Expenses</button>
+    </div>
+
+    <!-- Sales Report -->
+    <div id="rpt-sales" class="rtab-body">
+      <div class="toolbar" style="margin-bottom:1rem;">
+        <div class="iw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="r-sales-q" placeholder="Search invoice, customer..." oninput="filterRSales()"></div>
+        <button class="btn btn-ghost btn-xs" onclick="document.getElementById('r-sales-q').value='';filterRSales()">✕ Clear</button>
+        <input type="date" id="r-sf" style="width:auto;padding:7px 10px;">
+        <input type="date" id="r-st" style="width:auto;padding:7px 10px;">
+        <select id="r-ss" style="width:auto;"><option value="">All status</option><option value="completed">Completed</option><option value="refunded">Refunded</option></select>
+        <select id="r-pay-f" style="width:auto;"><option value="">All payments</option></select>
+        <button class="btn btn-dark btn-sm" onclick="loadRSales()">Filter</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearRFilter()">Clear All</button>
+        <span id="r-sales-sum" style="font-size:.75rem;color:var(--ink3);margin-left:auto;white-space:nowrap;"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('sales')">📄 Sales PDF</button>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('daily')">📅 Daily Report</button>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('monthly')">📆 Monthly Report</button>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('cashier')">👤 Cashier Report</button>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('payment-summary')">💳 Payment Summary</button>
+      </div>
+      <div class="stats" id="r-sales-stats" style="margin-bottom:1rem;"></div>
+      <div class="tw"><table><thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Type</th><th>Payment</th><th>Sub</th><th>Discount</th><th>Total</th><th>Status</th></tr></thead><tbody id="r-sales-tb"></tbody></table></div>
+    </div>
+
+    <!-- Inventory Report -->
+    <div id="rpt-inventory" class="rtab-body" style="display:none;">
+      <div class="toolbar" style="margin-bottom:1rem;">
+        <div class="iw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="r-inv-q" placeholder="Search product..." oninput="filterRInv()"></div>
+        <button class="btn btn-ghost btn-xs" onclick="document.getElementById('r-inv-q').value='';filterRInv()">✕ Clear</button>
+        <select id="r-inv-f" onchange="filterRInv()" style="width:auto;"><option value="">All</option><option value="low">Low stock</option><option value="out">Out of stock</option><option value="sugar">Sugar items</option></select>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('inventory')">📄 PDF</button>
+      </div>
+      <div class="tw"><table><thead><tr><th>Product</th><th>Category</th><th>Barcode</th><th>Cost</th><th>Price</th><th>Stock</th><th>Value</th><th>Status</th></tr></thead><tbody id="r-inv-tb"></tbody></table></div>
+    </div>
+
+    <!-- Customer Report -->
+    <div id="rpt-customers" class="rtab-body" style="display:none;">
+      <div class="toolbar" style="margin-bottom:1rem;">
+        <div class="iw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="r-cust-q" placeholder="Search customer..." oninput="filterRCust()"></div>
+        <button class="btn btn-ghost btn-xs" onclick="document.getElementById('r-cust-q').value='';filterRCust()">✕ Clear</button>
+        <select id="r-cust-sort" onchange="filterRCust()" style="width:auto;"><option value="spent">By spent</option><option value="pts">By points</option><option value="name">By name</option></select>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('customers')">📄 PDF</button>
+      </div>
+      <div class="tw"><table><thead><tr><th>Customer</th><th>Mobile</th><th>Type</th><th>Points</th><th>Total Spent</th><th>Transactions</th><th>Joined</th></tr></thead><tbody id="r-cust-tb"></tbody></table></div>
+    </div>
+
+    <!-- Top Products Report -->
+    <div id="rpt-products" class="rtab-body" style="display:none;">
+      <div class="toolbar" style="margin-bottom:1rem;">
+        <input type="date" id="r-prod-sf" style="width:auto;padding:7px 10px;">
+        <input type="date" id="r-prod-st" style="width:auto;padding:7px 10px;">
+        <button class="btn btn-dark btn-sm" onclick="loadRProds()">Filter</button>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('top-products')">📄 PDF</button>
+      </div>
+      <div class="tw"><table><thead><tr><th>Rank</th><th>Product</th><th>Category</th><th>Qty Sold</th><th>Revenue</th><th>Avg Price</th></tr></thead><tbody id="r-prod-tb"></tbody></table></div>
+    </div>
+
+    <!-- Payment Report -->
+    <div id="rpt-payment" class="rtab-body" style="display:none;">
+      <div class="toolbar" style="margin-bottom:1rem;">
+        <input type="date" id="r-pay-sf" style="width:auto;padding:7px 10px;">
+        <input type="date" id="r-pay-st" style="width:auto;padding:7px 10px;">
+        <button class="btn btn-dark btn-sm" onclick="loadRPayments()">Filter</button>
+        <button class="btn btn-ghost btn-sm" onclick="expRPDF('payments')">📄 PDF</button>
+      </div>
+      <div class="stats" id="r-pay-stats" style="margin-bottom:1rem;"></div>
+      <div class="tw"><table><thead><tr><th>Payment Method</th><th>Count</th><th>Total</th><th>% of Sales</th></tr></thead><tbody id="r-pay-tb"></tbody></table></div>
+    </div>
+
+    <!-- Z-Report (Day End) -->
+    <div id="rpt-zreport" class="rtab-body" style="display:none;">
+      <div style="max-width:600px;">
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-title">Day-End Z-Report</div>
+          <div class="fg"><label>Report Date</label><input type="date" id="z-date"></div>
+          <div class="fg"><label>Cashier (optional)</label><input type="text" id="z-cashier" placeholder="All cashiers"></div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-dark btn-sm" onclick="loadZReport()">Generate Report</button>
+            <button class="btn btn-ghost btn-sm" onclick="expRPDF('zreport')">📄 Print / PDF</button>
+          </div>
+        </div>
+        <div id="z-report-body"></div>
+        <div class="card" style="margin-top:1rem;background:rgba(255,176,32,.05);border-color:rgba(255,176,32,.2);" id="z-cash-count" style="display:none;">
+          <div class="card-title">Cash Drawer Count</div>
+          <div class="fg"><label>Physical cash in drawer (Rs.)</label><input type="number" id="z-physical-cash" placeholder="0.00" step="0.01"></div>
+          <div id="z-discrepancy" style="font-size:.85rem;margin-bottom:.75rem;"></div>
+          <button class="btn btn-dark btn-sm" onclick="calcDiscrepancy()">Calculate Discrepancy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expenses -->
+    <div id="rpt-expenses" class="rtab-body" style="display:none;">
+      <div class="page-hd" style="margin-bottom:1rem;">
+        <div></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm" onclick="expRPDF('expenses')">📄 PDF</button>
+          <button class="btn btn-dark btn-sm" onclick="openExpM()">+ Add Expense</button>
+        </div>
+      </div>
+      <div class="toolbar" style="margin-bottom:1rem;">
+        <div class="iw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="r-exp-q" placeholder="Search expense..." oninput="filterRExp()"></div>
+        <button class="btn btn-ghost btn-xs" onclick="document.getElementById('r-exp-q').value='';filterRExp()">✕ Clear</button>
+        <input type="date" id="r-exp-sf" style="width:auto;padding:7px 10px;">
+        <input type="date" id="r-exp-st" style="width:auto;padding:7px 10px;">
+        <button class="btn btn-dark btn-sm" onclick="loadExpenses()">Filter</button>
+      </div>
+      <div class="stats" id="r-exp-stats" style="margin-bottom:1rem;"></div>
+      <div class="tw"><table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>By</th></tr></thead><tbody id="r-exp-tb"></tbody></table></div>
+    </div>
+  </div>
+
   <!-- ═══ MODALS ═══ -->
+
+  <!-- Expense Modal -->
+  <div class="ov" id="exp-ov">
+    <div class="modal" style="max-width:400px;">
+      <div class="mhd"><div class="m-title">Add Expense</div><button class="mclose" onclick="closeM('exp-ov')">×</button></div>
+      <div class="mbody">
+        <div class="fg"><label>Category</label><select id="exp-cat"><option>Transport</option><option>Staff</option><option>Utilities</option><option>Supplies</option><option>Maintenance</option><option>Marketing</option><option>Other</option></select></div>
+        <div class="fg"><label>Description</label><input type="text" id="exp-desc" placeholder="e.g. Bought tea for staff..."></div>
+        <div class="fg"><label>Amount (Rs.)</label><input type="number" id="exp-amt" step="0.01" placeholder="0.00"></div>
+        <div class="fg"><label>Date</label><input type="date" id="exp-date"></div>
+        <button class="btn btn-dark btn-full" onclick="saveExpense()">Save Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expiry Discount Modal -->
+  <div class="ov" id="expd-ov">
+    <div class="modal" style="max-width:380px;">
+      <div class="mhd"><div class="m-title">Apply Expiry Discount</div><button class="mclose" onclick="closeM('expd-ov')">×</button></div>
+      <div class="mbody">
+        <div id="expd-prod-info" style="font-size:.85rem;margin-bottom:1rem;padding:.75rem;background:rgba(255,176,32,.08);border-radius:var(--r-sm);border:1px solid rgba(255,176,32,.2);"></div>
+        <div class="fg"><label>Discount Percentage</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" onclick="setExpDisc(10)">10%</button>
+            <button class="btn btn-ghost btn-sm" onclick="setExpDisc(25)">25%</button>
+            <button class="btn btn-ghost btn-sm" onclick="setExpDisc(50)">50%</button>
+            <button class="btn btn-ghost btn-sm" onclick="setExpDisc(75)">75%</button>
+          </div>
+          <input type="number" id="expd-pct" placeholder="Custom %" min="1" max="99" oninput="calcExpDisc()" style="margin-top:6px;">
+        </div>
+        <div id="expd-preview" style="font-size:.85rem;color:var(--green);margin-bottom:1rem;"></div>
+        <input type="hidden" id="expd-pid">
+        <button class="btn btn-accent btn-full" onclick="applyExpDisc()">Apply Discount to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cash Payment Modal (change calculator) -->
+  <div class="ov" id="cash-ov">
+    <div class="modal" style="max-width:380px;">
+      <div class="mhd"><div class="m-title">💵 Cash Payment</div><button class="mclose" onclick="closeM('cash-ov')">×</button></div>
+      <div class="mbody">
+        <div style="margin-bottom:1rem;padding:1rem;background:var(--surface2);border-radius:var(--r-sm);text-align:center;">
+          <div style="font-size:.75rem;color:var(--ink3);margin-bottom:4px;">Bill Total</div>
+          <div style="font-size:2rem;font-weight:700;font-family:var(--font-m);" id="cash-total">Rs. 0.00</div>
+        </div>
+        <div class="fg"><label>Cash Given by Customer (Rs.)</label><input type="number" id="cash-given" placeholder="0.00" step="0.01" oninput="calcChange()" autofocus></div>
+        <div id="cash-change-display" style="margin-bottom:1rem;display:none;">
+          <div style="padding:1rem;border-radius:var(--r-sm);text-align:center;" id="cash-change-box">
+            <div style="font-size:.75rem;margin-bottom:4px;" id="cash-change-lbl">Change</div>
+            <div style="font-size:1.8rem;font-weight:700;font-family:var(--font-m);" id="cash-change-amt">Rs. 0.00</div>
+          </div>
+        </div>
+        <div class="fg"><label>Reference / Note (optional)</label><input type="text" id="cash-ref" placeholder="e.g. receipt no..."></div>
+        <button class="btn btn-dark btn-full" id="cash-confirm-btn" onclick="confirmCashCheckout()" disabled>Complete Sale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other Payment Ref Modal -->
+  <div class="ov" id="payref-ov">
+    <div class="modal" style="max-width:360px;">
+      <div class="mhd"><div class="m-title">Payment Reference</div><button class="mclose" onclick="closeM('payref-ov')">×</button></div>
+      <div class="mbody">
+        <div style="font-size:.85rem;color:var(--ink3);margin-bottom:1rem;" id="payref-label"></div>
+        <div class="fg"><label>Reference / Transaction Code</label><input type="text" id="payref-code" placeholder="e.g. TXN123456..."></div>
+        <div class="fg"><label>Note (optional)</label><input type="text" id="payref-note" placeholder="Optional note..."></div>
+        <button class="btn btn-dark btn-full" onclick="confirmPayRefCheckout()">Complete Sale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp Receipt Modal -->
+  <div class="ov" id="wa-ov">
+    <div class="modal" style="max-width:380px;">
+      <div class="mhd"><div class="m-title">📱 Send Receipt via WhatsApp</div><button class="mclose" onclick="closeM('wa-ov')">×</button></div>
+      <div class="mbody">
+        <div class="fg"><label>Customer Mobile</label><input type="text" id="wa-num" placeholder="07XXXXXXXX"></div>
+        <div style="padding:.75rem;background:rgba(46,212,122,.08);border:1px solid rgba(46,212,122,.2);border-radius:var(--r-sm);font-size:.8rem;margin-bottom:1rem;color:#1a7a4a;">
+          Receipt will be sent as a WhatsApp message via wa.me link
+        </div>
+        <button class="btn btn-green btn-full" onclick="sendWAReceipt()">Send via WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Refund Voucher Apply Modal -->
+  <div class="ov" id="rvc-ov">
+    <div class="modal" style="max-width:360px;">
+      <div class="mhd"><div class="m-title">🎁 Apply Refund as Voucher</div><button class="mclose" onclick="closeM('rvc-ov')">×</button></div>
+      <div class="mbody">
+        <div id="rvc-info" style="font-size:.85rem;margin-bottom:1rem;padding:.75rem;background:var(--surface2);border-radius:var(--r-sm);"></div>
+        <div class="fg"><label>Expiry (optional)</label><input type="date" id="rvc-exp"></div>
+        <button class="btn btn-dark btn-full" onclick="createRefundVoucher()">Create Refund Voucher</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Voice Billing Overlay -->
+  <div class="ov" id="voice-ov">
+    <div class="modal" style="max-width:460px;">
+      <div class="mhd"><div class="m-title">🎤 Voice Billing</div><button class="mclose" onclick="closeM('voice-ov');stopVoice()">×</button></div>
+      <div class="mbody" style="text-align:center;">
+        <div id="voice-status" style="font-size:.85rem;color:var(--ink3);margin-bottom:1rem;">Click the microphone to start</div>
+        <button class="btn btn-dark" id="voice-mic-btn" onclick="toggleVoice()" style="width:80px;height:80px;border-radius:50%;font-size:2rem;margin-bottom:1rem;">🎤</button>
+        <div id="voice-transcript" style="font-size:.9rem;min-height:40px;padding:.75rem;background:var(--surface2);border-radius:var(--r-sm);margin-bottom:1rem;font-style:italic;color:var(--ink2);"></div>
+        <div id="voice-matches" style="text-align:left;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Split Payment Modal -->
+  <div class="ov" id="split-ov">
+    <div class="modal" style="max-width:440px;">
+      <div class="mhd"><div class="m-title">↔ Split Payment</div><button class="mclose" onclick="closeM('split-ov')">×</button></div>
+      <div class="mbody">
+        <div style="margin-bottom:1rem;padding:.75rem;background:var(--surface2);border-radius:var(--r-sm);">
+          <div style="font-size:.75rem;color:var(--ink3);">Total Due</div>
+          <div style="font-size:1.4rem;font-weight:700;font-family:var(--font-m);" id="split-total">Rs. 0.00</div>
+        </div>
+        <div id="split-items"></div>
+        <button class="btn btn-ghost btn-sm" onclick="addSplitLine()" style="margin-bottom:.75rem;">+ Add payment</button>
+        <div id="split-remaining" style="font-size:.85rem;margin-bottom:.75rem;"></div>
+        <button class="btn btn-dark btn-full" onclick="confirmSplitCheckout()">Complete Split Payment</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Product Modal -->
   <div class="ov" id="pm-ov">
@@ -2314,6 +2638,7 @@
           <div class="fg"><label>Low Stock Alert</label><input type="number" id="pm-limit" value="5"></div>
         </div>
         <div class="fg"><label>Item Discount (Rs.)</label><input type="number" id="pm-disc" value="0" step="0.01"></div>
+        <div class="fg"><label>Expiry Date (leave blank if N/A)</label><input type="date" id="pm-expiry"></div>
         <div class="fg"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox"
               id="pm-multi" style="width:auto;" onchange="toggleMulti()"> Multiple prices (same barcode, different
             variants)</label></div>
@@ -2416,19 +2741,24 @@
 
   <!-- Refund Modal (Partial) -->
   <div class="ov" id="rf-ov">
-    <div class="modal" style="max-width:500px;">
+    <div class="modal" style="max-width:520px;">
       <div class="mhd">
         <div class="m-title">Process Refund</div><button class="mclose" onclick="closeM('rf-ov')">×</button>
       </div>
       <div class="mbody">
-        <div id="rf-sale-info"
-          style="margin-bottom:1rem;padding:.75rem;background:var(--surface2);border-radius:var(--r-sm);font-size:.82rem;">
-        </div>
-        <div
-          style="font-size:.78rem;font-weight:600;color:var(--ink3);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em;">
-          Select items to refund</div>
+        <div id="rf-sale-info" style="margin-bottom:1rem;padding:.75rem;background:var(--surface2);border-radius:var(--r-sm);font-size:.82rem;"></div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--ink3);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em;">Select items to refund</div>
         <div id="rf-items"></div>
         <div class="divider"></div>
+        <div class="fg"><label>Refund Method</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:.5rem;">
+            <div class="pay-opt sel" onclick="selRfMethod(this,'cash')" data-method="cash">💵 Cash</div>
+            <div class="pay-opt" onclick="selRfMethod(this,'points')" data-method="points">⭐ Add Points</div>
+            <div class="pay-opt" onclick="selRfMethod(this,'voucher')" data-method="voucher">🎁 Voucher</div>
+          </div>
+          <div id="rf-voucher-hint" style="display:none;font-size:.75rem;color:var(--ink3);padding:6px 9px;background:var(--surface2);border-radius:var(--r-sm);">A gift voucher will be created for the refund amount</div>
+          <div id="rf-points-hint" style="display:none;font-size:.75rem;color:var(--ink3);padding:6px 9px;background:var(--surface2);border-radius:var(--r-sm);">Points equivalent to the refund amount will be added</div>
+        </div>
         <div class="fg"><label>Refund Reason</label><select id="rf-reason">
             <option value="Customer request">Customer request</option>
             <option value="Wrong item">Wrong item</option>
@@ -2437,10 +2767,8 @@
             <option value="Other">Other</option>
           </select></div>
         <div class="fg"><label>Notes</label><input type="text" id="rf-notes" placeholder="Optional notes..."></div>
-        <div style="font-size:.82rem;margin-bottom:.75rem;">Refund total: <strong class="mono" id="rf-total">Rs.
-            0.00</strong></div>
-        <div class="fg"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox"
-              id="rf-print" checked style="width:auto;"> Print refund receipt</label></div>
+        <div style="font-size:.82rem;margin-bottom:.75rem;">Refund total: <strong class="mono" id="rf-total">Rs. 0.00</strong></div>
+        <div class="fg"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="rf-print" checked style="width:auto;"> Print refund receipt</label></div>
         <button class="btn btn-red btn-full" onclick="doRefund()">Process Refund</button>
       </div>
     </div>
@@ -2524,9 +2852,6 @@
 
   <!-- Toast -->
   <div class="toast-wrap" id="tw"></div>
-</body>
-
-</html>
 <script>
   // ══════════════════════════════════════════════════════════
   // CONFIG — Replace with your Supabase anon key
@@ -2842,7 +3167,7 @@
     document.getElementById('pm-id').value = '';
     ['pm-name', 'pm-bc', 'pm-cat', 'pm-cost', 'pm-price', 'pm-stock'].forEach(x => document.getElementById(x).value = '');
     document.getElementById('pm-limit').value = 5; document.getElementById('pm-disc').value = 0;
-    document.getElementById('pm-multi').checked = false; document.getElementById('pm-sugar').checked = false;
+    document.getElementById('pm-multi').checked = false; document.getElementById('pm-sugar').checked = false; document.getElementById('pm-expiry').value = '';
     document.getElementById('multi-prices').style.display = 'none';
     document.getElementById('mp-list').innerHTML = '';
     if (id) {
@@ -2855,7 +3180,7 @@
       document.getElementById('pm-price').value = p.selling_price;
       document.getElementById('pm-stock').value = p.stock_qty;
       document.getElementById('pm-limit').value = p.low_stock_limit || 5;
-      document.getElementById('pm-disc').value = p.item_discount || 0;
+      document.getElementById('pm-disc').value = p.item_discount || 0; document.getElementById('pm-expiry').value = p.expiry_date || '';
       document.getElementById('pm-sugar').checked = p.is_sugar || false;
       if (priceVariants[p.id]?.length) {
         document.getElementById('pm-multi').checked = true;
@@ -2884,7 +3209,7 @@
         if (lbl && !isNaN(pr)) variants.push({ label: lbl, price: pr });
       });
     }
-    const payload = { name, barcode: document.getElementById('pm-bc').value.trim() || null, category: document.getElementById('pm-cat').value.trim() || null, cost_price: parseFloat(document.getElementById('pm-cost').value) || 0, selling_price: price, stock_qty: stock, low_stock_limit: parseInt(document.getElementById('pm-limit').value) || 5, item_discount: parseFloat(document.getElementById('pm-disc').value) || 0, price_variants: variants, is_sugar: document.getElementById('pm-sugar').checked };
+    const payload = { name, barcode: document.getElementById('pm-bc').value.trim() || null, category: document.getElementById('pm-cat').value.trim() || null, cost_price: parseFloat(document.getElementById('pm-cost').value) || 0, selling_price: price, stock_qty: stock, low_stock_limit: parseInt(document.getElementById('pm-limit').value) || 5, item_discount: parseFloat(document.getElementById('pm-disc').value) || 0, price_variants: variants, is_sugar: document.getElementById('pm-sugar').checked, expiry_date: document.getElementById('pm-expiry').value || null };
     let err;
     if (id) { ({ error: err } = await sb.from('products').update(payload).eq('id', id)); }
     else { ({ error: err } = await sb.from('products').insert(payload)); }
@@ -3732,4 +4057,990 @@
   // BOOT
   // ══════════════════════════════════════════════════════════
   init();
+</script><script>
+// ═══════════════════════════════════════════════════════════════
+// POS v3 ADDITIONS — All new features
+// ═══════════════════════════════════════════════════════════════
+
+// ── OVERRIDE: Enhanced checkout flow (cash change + pay ref)
+async function checkoutFlow() {
+  if (!cart.length) { toast('Cart is empty', 'error'); return; }
+  const payMethod = getSelPay();
+  const sym = SYM();
+  const sub = cart.reduce((s, i) => s + i.tot, 0);
+  const dv = parseFloat(document.getElementById('bdis').value) || 0;
+  const dt = document.getElementById('bdis-t').value;
+  const bdisc = dt === 'pct' ? sub * dv / 100 : Math.min(dv, sub);
+  const vdisc = applyVoucherData ? Math.min(applyVoucherData.balance, sub) : 0;
+  const pdisc = redeemPtsData ? redeemPtsData.discount : 0;
+  const net = Math.max(0, sub - bdisc - vdisc - pdisc);
+
+  if (payMethod === 'Cash') {
+    document.getElementById('cash-total').textContent = `${sym} ${net.toFixed(2)}`;
+    document.getElementById('cash-given').value = '';
+    document.getElementById('cash-change-display').style.display = 'none';
+    document.getElementById('cash-confirm-btn').disabled = true;
+    document.getElementById('cash-ref').value = '';
+    openM('cash-ov');
+    setTimeout(() => document.getElementById('cash-given').focus(), 200);
+  } else if (['Card', 'QR', 'Koko', 'Mint Pay'].includes(payMethod) || payMethod !== 'Cash') {
+    // Check if it's a non-cash method that needs a reference
+    const needsRef = ['Koko', 'Mint Pay', 'QR'].includes(payMethod);
+    if (needsRef) {
+      document.getElementById('payref-label').textContent = `Enter ${payMethod} transaction reference code:`;
+      document.getElementById('payref-code').value = '';
+      document.getElementById('payref-note').value = '';
+      openM('payref-ov');
+    } else {
+      checkout();
+    }
+  } else {
+    checkout();
+  }
+}
+
+function calcChange() {
+  const given = parseFloat(document.getElementById('cash-given').value) || 0;
+  const total = parseFloat(document.getElementById('cash-total').textContent.replace(/[^0-9.]/g, '')) || 0;
+  const change = given - total;
+  const sym = SYM();
+  const display = document.getElementById('cash-change-display');
+  const box = document.getElementById('cash-change-box');
+  const confirmBtn = document.getElementById('cash-confirm-btn');
+  if (given > 0) {
+    display.style.display = 'block';
+    document.getElementById('cash-change-amt').textContent = `${sym} ${Math.abs(change).toFixed(2)}`;
+    if (change >= 0) {
+      document.getElementById('cash-change-lbl').textContent = change === 0 ? 'Exact Change' : 'Change to Return';
+      box.className = 'change-positive';
+      confirmBtn.disabled = false;
+    } else {
+      document.getElementById('cash-change-lbl').textContent = 'Amount Short';
+      box.className = 'change-negative';
+      confirmBtn.disabled = true;
+    }
+  } else {
+    display.style.display = 'none';
+    confirmBtn.disabled = true;
+  }
+}
+
+function confirmCashCheckout() {
+  const given = parseFloat(document.getElementById('cash-given').value) || 0;
+  const ref = document.getElementById('cash-ref').value.trim();
+  closeM('cash-ov');
+  checkout(given, ref);
+}
+
+function confirmPayRefCheckout() {
+  const code = document.getElementById('payref-code').value.trim();
+  const note = document.getElementById('payref-note').value.trim();
+  closeM('payref-ov');
+  checkout(0, code + (note ? ' — ' + note : ''));
+}
+
+// ── OVERRIDE: Enhanced checkout with cash given + reference + expiry tracking
+const _origCheckout = checkout;
+async function checkout(cashGiven = 0, payRef = '') {
+  if (!cart.length) { toast('Cart is empty', 'error'); return; }
+  const btn = document.getElementById('ck-btn');
+  btn.disabled = true; btn.innerHTML = '<div class="spin"></div>Processing...';
+  try {
+    const sub = cart.reduce((s, i) => s + i.tot, 0);
+    const dv = parseFloat(document.getElementById('bdis').value) || 0;
+    const dt = document.getElementById('bdis-t').value;
+    const bdisc = dt === 'pct' ? sub * dv / 100 : Math.min(dv, sub);
+    const vdisc = applyVoucherData ? Math.min(applyVoucherData.balance, sub) : 0;
+    const pdisc = redeemPtsData ? redeemPtsData.discount : 0;
+    const net = Math.max(0, sub - bdisc - vdisc - pdisc);
+    const cashChange = cashGiven > 0 ? cashGiven - net : 0;
+    const mob = document.getElementById('cust-mob').value.trim();
+    const custType = document.getElementById('cust-type').value || 'Walk-in';
+    const payMethod = getSelPay();
+    let custId = null;
+    if (mob) {
+      let c = customers.find(x => x.mobile_number === mob);
+      if (!c) {
+        const { data } = await sb.from('customers').insert({ name: 'Walk-in Customer', mobile_number: mob, loyalty_points: 0, total_spent: 0, customer_type: custType }).select().single();
+        if (data) { c = data; customers.push(data); }
+      }
+      if (c) custId = c.id;
+    }
+    const salePayload = {
+      customer_id: custId, cashier_id: currentUser.id,
+      sub_total: sub, bill_discount: bdisc, voucher_discount: vdisc,
+      points_discount: pdisc, net_amount: net, status: 'completed',
+      payment_method: payMethod, customer_type: custType,
+      cash_given: cashGiven || null, cash_change: cashChange || null,
+      payment_ref: payRef || null
+    };
+    const itemsPayload = cart.map(item => ({
+      product_id: item.pid, qty: item.qty, unit_price: item.unitPrice,
+      item_discount: item.itemDisc, price_variant: item.label || null, total_price: item.tot
+    }));
+    if (!isOnline) {
+      const offlineSale = { ...salePayload, id: 'offline_' + Date.now(), created_at: new Date().toISOString() };
+      offlineQueue.push({ type: 'sale', sale: salePayload, items: itemsPayload });
+      saveOfflineQ();
+      toast('Saved offline — will sync when connected', 'warn');
+      showReceipt({ sale: offlineSale, items: [...cart], sub, bdisc, vdisc, pdisc, net, custId, mob, custType, payMethod, cashGiven, cashChange, payRef });
+      clearCart(); btn.disabled = false; btn.innerHTML = 'Complete Sale →'; return;
+    }
+    const { data: sale, error: sErr } = await sb.from('sales').insert(salePayload).select().single();
+    if (sErr) throw sErr;
+    const withId = itemsPayload.map(i => ({ ...i, sale_id: sale.id }));
+    await sb.from('sale_items').insert(withId);
+    await Promise.all(cart.map(item => {
+      const p = products.find(x => x.id === item.pid);
+      if (p) return sb.from('products').update({ stock_qty: Math.max(0, p.stock_qty - item.qty) }).eq('id', item.pid);
+    }));
+    const ratio = RATIO();
+    if (custId) {
+      const pts = Math.floor(net / ratio);
+      const c = customers.find(x => x.id === custId);
+      const usedPts = redeemPtsData?.pts || 0;
+      if (c) await sb.from('customers').update({ loyalty_points: Math.max(0, (c.loyalty_points || 0) + pts - usedPts), total_spent: (c.total_spent || 0) + net, customer_type: custType }).eq('id', custId);
+    }
+    if (applyVoucherData) {
+      const newBal = Math.max(0, (applyVoucherData.balance || applyVoucherData.value) - vdisc);
+      await sb.from('gift_vouchers').update({ balance: newBal, status: newBal === 0 ? 'used' : 'active' }).eq('id', applyVoucherData.id);
+    }
+    toast('Sale completed ✓', 'success');
+    const rcData = { sale, items: [...cart], sub, bdisc, vdisc, pdisc, net, custId, mob, custType, payMethod, cashGiven, cashChange, payRef };
+    if (settings.show_receipt !== false) showReceipt(rcData);
+    if (settings.auto_print) setTimeout(() => printR(), 500);
+    clearCart(); loadP(); loadCusts(); loadVouchers();
+  } catch (e) { toast('Checkout failed: ' + e.message, 'error'); }
+  finally { btn.disabled = false; btn.innerHTML = 'Complete Sale →'; }
+}
+
+// ── OVERRIDE: Enhanced receipt with cash change + ref
+const _origBuildReceipt = buildReceiptHTML;
+function buildReceiptHTML(data) {
+  const { sale, items, sub, bdisc, vdisc, pdisc, net, custId, mob, payMethod, cashGiven, cashChange, payRef } = data;
+  const sym = SYM();
+  const cust = custId ? customers.find(x => x.id === custId) : null;
+  const ratio = RATIO(); const pts = Math.floor(net / ratio);
+  const date = new Date(sale.created_at || new Date()).toLocaleString();
+  const logo = settings.logo_url ? `<img src="${settings.logo_url}" style="max-height:50px;margin-bottom:5px;" onerror="this.style.display='none'"><br>` : '';
+  const paper = settings.paper_size || '80mm';
+  const maxW = paper === 'A4' ? '700px' : paper === 'A5' ? '500px' : '320px';
+  return `<div class="receipt" id="print-r" style="max-width:${maxW};margin:0 auto;">
+    <div class="rb">
+      ${logo}
+      <div class="rb-name">${ESC(settings.shop_name || 'My Shop')}</div>
+      <div class="rb-meta">
+        ${settings.phone ? `📞 ${ESC(settings.phone)}<br>` : ''}
+        ${settings.address ? `${ESC(settings.address)}<br>` : ''}
+        ${settings.email ? `✉ ${ESC(settings.email)}<br>` : ''}
+        ${settings.website ? `🌐 ${ESC(settings.website)}<br>` : ''}
+        ${date}<br>
+        Invoice: <strong>#${(sale.id || 'OFFLINE').slice(-10).toUpperCase()}</strong>
+        ${cust ? `<br>Customer: ${ESC(cust.name)} · ${cust.mobile_number}` : ''}
+        ${mob && !cust ? `<br>Mobile: ${mob}` : ''}
+        ${payMethod ? `<br>Payment: ${ESC(payMethod)}${payRef ? ` [${ESC(payRef)}]` : ''}` : ''}
+      </div>
+    </div>
+    ${items.map(i => `<div class="rl"><span>${ESC(i.name)} ×${i.qty}${i.itemDisc > 0 ? ` (-${sym}${i.itemDisc.toFixed(2)})` : ''}</span><span>${sym} ${i.tot.toFixed(2)}</span></div>`).join('')}
+    <hr class="rsep">
+    <div class="rl"><span>Subtotal</span><span>${sym} ${sub.toFixed(2)}</span></div>
+    ${bdisc > 0 ? `<div class="rl receipt-disc"><span>Discount</span><span>- ${sym} ${bdisc.toFixed(2)}</span></div>` : ''}
+    ${vdisc > 0 ? `<div class="rl receipt-disc"><span>🎁 Voucher</span><span>- ${sym} ${vdisc.toFixed(2)}</span></div>` : ''}
+    ${pdisc > 0 ? `<div class="rl receipt-disc"><span>⭐ Points redeemed</span><span>- ${sym} ${pdisc.toFixed(2)}</span></div>` : ''}
+    <hr class="rsep">
+    <div class="rl b"><span>TOTAL</span><span>${sym} ${net.toFixed(2)}</span></div>
+    ${cashGiven > 0 ? `<div class="rl"><span>Cash Given</span><span>${sym} ${cashGiven.toFixed(2)}</span></div>` : ''}
+    ${cashGiven > 0 ? `<div class="rl b" style="color:#1a7a4a;"><span>Change</span><span>${sym} ${(cashGiven - net).toFixed(2)}</span></div>` : ''}
+    ${pts > 0 && custId ? `<hr class="rsep"><div class="rl loyalty-line"><span>Points Earned</span><span>+${pts} pts</span></div>` : ''}
+    ${cust ? `<div class="rl loyalty-line"><span>Total Points</span><span>${(cust.loyalty_points || 0) + pts} pts</span></div>` : ''}
+    <div class="rf">${ESC(settings.receipt_footer || 'Thank you for shopping!')}<br><small>POS by NextGenIT &amp; Lakshan</small></div>
+  </div>`;
+}
+
+// ── OVERRIDE: Enhanced refund with method (cash/points/voucher)
+let refundMethod = 'cash';
+function selRfMethod(el, method) {
+  refundMethod = method;
+  document.querySelectorAll('.rf-ov .pay-opt').forEach(e => e.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('rf-voucher-hint').style.display = method === 'voucher' ? 'block' : 'none';
+  document.getElementById('rf-points-hint').style.display = method === 'points' ? 'block' : 'none';
+}
+
+// ── ENHANCED doRefund with method options
+const _origDoRefund = doRefund;
+async function doRefund() {
+  if (!currentRefundSale) return;
+  const { data: sale } = await sb.from('sales').select('*,customers(loyalty_points,total_spent,id)').eq('id', currentRefundSale.id).single();
+  let totalRefund = 0; const refundItems = [];
+  currentRefundItems.forEach((item, i) => {
+    const chk = document.getElementById(`ri-${i}`);
+    const qty = parseInt(document.getElementById(`ri-q-${i}`)?.value) || 0;
+    if (chk?.checked && qty > 0) {
+      const eff = qty * (item.unit_price - (item.item_discount || 0));
+      totalRefund += eff;
+      refundItems.push({ ...item, refund_qty: qty, refund_amt: eff });
+    }
+  });
+  if (!totalRefund) { toast('Select at least one item', 'warn'); return; }
+  if (!confirm(`Refund ${SYM()} ${totalRefund.toFixed(2)} via ${refundMethod}? Stock will be restored.`)) return;
+
+  // Restore stock
+  await Promise.all(refundItems.map(item => {
+    const p = products.find(x => x.id === item.product_id);
+    if (p) return sb.from('products').update({ stock_qty: p.stock_qty + item.refund_qty }).eq('id', item.product_id);
+  }));
+
+  // Handle refund method
+  if (refundMethod === 'points' && sale.customer_id) {
+    const pts = Math.floor(totalRefund / RATIO() * RATIO()); // points equiv
+    const addPts = Math.floor(totalRefund); // 1 point per Rs.1 for refund
+    const c = customers.find(x => x.id === sale.customer_id);
+    if (c) await sb.from('customers').update({ loyalty_points: (c.loyalty_points || 0) + addPts }).eq('id', sale.customer_id);
+    toast(`⭐ ${addPts} points added to customer`, 'success');
+  } else if (refundMethod === 'voucher') {
+    // Store refund data and open voucher creation modal
+    window._refundVoucherAmt = totalRefund;
+    window._refundSaleId = sale.id;
+    window._refundItems = refundItems;
+    document.getElementById('rvc-info').innerHTML = `Refund Amount: <strong>${SYM()} ${totalRefund.toFixed(2)}</strong><br>A voucher will be created for this amount.`;
+    closeM('rf-ov');
+    openM('rvc-ov');
+    return;
+  } else {
+    // Cash refund — deduct loyalty proportionally
+    if (sale.customer_id && sale.customers) {
+      const ratio = RATIO();
+      const origPts = Math.floor(sale.net_amount / ratio);
+      const refundPts = Math.floor((totalRefund / sale.net_amount) * origPts);
+      await sb.from('customers').update({
+        loyalty_points: Math.max(0, (sale.customers.loyalty_points || 0) - refundPts),
+        total_spent: Math.max(0, (sale.customers.total_spent || 0) - totalRefund)
+      }).eq('id', sale.customer_id);
+    }
+  }
+
+  await _finishRefund(sale, refundItems, totalRefund);
+}
+
+async function _finishRefund(sale, refundItems, totalRefund) {
+  const fullRefund = totalRefund >= sale.net_amount;
+  await sb.from('refund_logs').insert({ sale_id: sale.id, refund_reason: document.getElementById('rf-reason').value, refund_notes: document.getElementById('rf-notes').value, total_refunded: totalRefund, is_partial: !fullRefund, refunded_by: currentUser.id, refund_method: refundMethod });
+  if (fullRefund) await sb.from('sales').update({ status: 'refunded' }).eq('id', sale.id);
+  if (document.getElementById('rf-print').checked) {
+    const sym = SYM();
+    const w = window.open('', '_blank', 'width=420,height=600');
+    w.document.write(`<html><body style="font-family:monospace;font-size:11px;padding:16px;max-width:300px;">
+      <div style="text-align:center;border-bottom:1px dashed #ccc;padding-bottom:8px;margin-bottom:8px;">
+        <div style="font-size:14px;font-weight:700;">${ESC(settings.shop_name || 'My Shop')}</div>
+        <div style="font-size:9px;color:#555;">REFUND RECEIPT<br>${new Date().toLocaleString()}<br>Ref: #${sale.id.slice(-10).toUpperCase()}</div>
+      </div>
+      ${refundItems.map(i => `<div style="display:flex;justify-content:space-between;"><span>${ESC(i.products?.name || 'Item')} ×${i.refund_qty}</span><span>${sym} ${i.refund_amt.toFixed(2)}</span></div>`).join('')}
+      <div style="border-top:1px dashed #ccc;margin-top:8px;padding-top:8px;font-weight:700;display:flex;justify-content:space-between;"><span>REFUND TOTAL</span><span>${sym} ${totalRefund.toFixed(2)}</span></div>
+      <div style="margin-top:6px;font-size:9px;color:#555;">Method: ${refundMethod} · Reason: ${ESC(document.getElementById('rf-reason').value)}</div>
+      <div style="text-align:center;margin-top:10px;font-size:9px;">POS by NextGenIT &amp; Lakshan</div>
+    </body></html>`);
+    w.document.close(); setTimeout(() => w.print(), 200);
+  }
+  toast(`Refund ${SYM()} ${totalRefund.toFixed(2)} ✓`, 'success');
+  closeM('rf-ov'); loadSales(); loadP(); loadCusts();
+}
+
+async function createRefundVoucher() {
+  const amt = window._refundVoucherAmt;
+  const saleId = window._refundSaleId;
+  const refundItems = window._refundItems;
+  const exp = document.getElementById('rvc-exp').value;
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const code = 'RF' + Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  const { error } = await sb.from('gift_vouchers').insert({ code, value: amt, balance: amt, status: 'active', notes: `Refund from #${saleId.slice(-8)}`, expires_at: exp || null });
+  if (error) { toast('Voucher creation failed', 'error'); return; }
+  const { data: sale } = await sb.from('sales').select('*').eq('id', saleId).single();
+  await _finishRefund(sale, refundItems, amt);
+  toast(`🎁 Refund voucher created: ${code}`, 'success');
+  closeM('rvc-ov'); loadVouchers();
+}
+
+// ── ENHANCED: Voucher rendering with download/print
+function renderVouchers() {
+  const sym = SYM();
+  let filtered = vouchers;
+  const q = (document.getElementById('vchr-q')?.value || '').toLowerCase();
+  const f = document.getElementById('vchr-f')?.value || '';
+  if (q) filtered = filtered.filter(v => v.code.toLowerCase().includes(q) || (v.notes || '').toLowerCase().includes(q));
+  if (f) filtered = filtered.filter(v => v.status === f);
+  const tb = document.getElementById('vchr-tb');
+  if (!filtered.length) { tb.innerHTML = `<tr><td colspan="7"><div class="es">No vouchers found</div></td></tr>`; return; }
+  tb.innerHTML = filtered.map(v => {
+    const exp = v.expires_at ? new Date(v.expires_at) : null;
+    const expired = exp && exp < new Date();
+    const status = v.status === 'used' ? '<span class="badge bg-gray">Used</span>' : expired ? '<span class="badge bg-red">Expired</span>' : '<span class="badge bg-green">Active</span>';
+    return `<tr>
+      <td><div style="font-family:var(--font-m);font-size:.9rem;font-weight:700;letter-spacing:2px;color:${v.status === 'active' ? 'var(--ink)' : 'var(--ink3)'};">${ESC(v.code)}</div></td>
+      <td class="mono">${sym} ${v.value.toFixed(2)}</td>
+      <td class="mono fw7">${sym} ${(v.balance || v.value).toFixed(2)}</td>
+      <td>${status}</td>
+      <td class="hm" style="font-size:.78rem;color:var(--ink3);">${ESC(v.notes || '—')}</td>
+      <td class="hm" style="font-size:.75rem;">${exp ? exp.toLocaleDateString() : '—'}</td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-xs" onclick="printVoucher('${v.id}')">🖨 Print</button>
+        <button class="btn btn-ghost btn-xs" onclick="downloadVoucher('${v.id}')">⬇ PDF</button>
+        ${v.status === 'active' ? `<button class="btn btn-ghost btn-xs" onclick="applyVoucherToCart('${v.code}')">+ Cart</button>` : ''}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterVouchers() { renderVouchers(); }
+
+function downloadVoucher(id) {
+  const v = vouchers.find(x => x.id === id); if (!v) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85, 54] });
+  doc.setFillColor(13, 13, 13);
+  doc.rect(0, 0, 85, 54, 'F');
+  doc.setTextColor(200, 245, 90);
+  doc.setFont(undefined, 'bold');
+  doc.setFontSize(8);
+  doc.text(settings.shop_name || 'My Shop', 5, 10);
+  doc.setFontSize(6);
+  doc.setTextColor(255, 255, 255);
+  doc.text('GIFT VOUCHER', 5, 16);
+  doc.setFontSize(18);
+  doc.setTextColor(200, 245, 90);
+  doc.text(v.code, 5, 30);
+  doc.setFontSize(10);
+  doc.setTextColor(255, 255, 255);
+  doc.text(`Value: ${SYM()} ${v.value.toFixed(2)}`, 5, 40);
+  if (v.expires_at) {
+    doc.setFontSize(7);
+    doc.setTextColor(180, 180, 180);
+    doc.text(`Expires: ${new Date(v.expires_at).toLocaleDateString()}`, 5, 47);
+  }
+  doc.save(`voucher_${v.code}.pdf`);
+  toast('Voucher PDF downloaded ✓', 'success');
+}
+
+function applyVoucherToCart(code) {
+  const v = vouchers.find(x => x.code === code);
+  if (!v || v.status !== 'active') { toast('Voucher not valid', 'error'); return; }
+  applyVoucherData = v; calcTot();
+  toast(`🎁 Voucher ${code} added to cart`, 'success');
+  go('pos');
+}
+
+// ── WhatsApp Receipt
+function openWAReceipt() {
+  const mob = document.getElementById('cust-mob').value.trim();
+  document.getElementById('wa-num').value = mob || '';
+  openM('wa-ov');
+}
+function sendWAReceipt() {
+  const num = document.getElementById('wa-num').value.trim().replace(/\D/g, '');
+  if (!num) { toast('Enter mobile number', 'error'); return; }
+  const sym = SYM();
+  const sub = cart.reduce((s, i) => s + i.tot, 0);
+  const itemLines = cart.map(i => `• ${i.name} x${i.qty} = ${sym} ${i.tot.toFixed(2)}`).join('%0A');
+  const total = document.getElementById('c-tot').textContent;
+  const msg = `*${ESC(settings.shop_name || 'My Shop')}*%0A%0AYour receipt:%0A${itemLines}%0A%0A*Total: ${total}*%0A%0AThank you for shopping! 🙏`;
+  const waNum = num.startsWith('0') ? '94' + num.slice(1) : num;
+  window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
+  closeM('wa-ov');
+  toast('WhatsApp opened ✓', 'success');
+}
+
+// ── VOICE BILLING (Web Speech API)
+let voiceRecog = null, voiceActive = false;
+function initVoice() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    document.getElementById('voice-status').textContent = 'Voice not supported in this browser';
+    return;
+  }
+  document.getElementById('voice-status').textContent = 'Click microphone to start';
+  document.getElementById('voice-transcript').textContent = '';
+  document.getElementById('voice-matches').innerHTML = '';
+}
+function toggleVoice() {
+  if (voiceActive) stopVoice(); else startVoice();
+}
+function startVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  voiceRecog = new SR();
+  voiceRecog.continuous = true;
+  voiceRecog.interimResults = true;
+  voiceRecog.lang = 'en-US';
+  voiceRecog.onstart = () => {
+    voiceActive = true;
+    document.getElementById('voice-mic-btn').classList.add('voice-active');
+    document.getElementById('voice-status').textContent = '🔴 Listening... Speak product names';
+  };
+  voiceRecog.onresult = (e) => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join(' ').toLowerCase();
+    document.getElementById('voice-transcript').textContent = transcript;
+    const matches = [];
+    products.forEach(p => {
+      const name = p.name.toLowerCase();
+      if (transcript.includes(name) || name.split(' ').some(w => w.length > 3 && transcript.includes(w))) {
+        // extract quantity
+        const numWords = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+        let qty = 1;
+        const qMatch = transcript.match(/(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+/i);
+        if (qMatch) qty = parseInt(qMatch[1]) || numWords[qMatch[1]] || 1;
+        if (!matches.find(m => m.id === p.id)) matches.push({ ...p, detectedQty: qty });
+      }
+    });
+    const mc = document.getElementById('voice-matches');
+    mc.innerHTML = matches.map(p => `<div class="voice-match" onclick="addVoiceItem('${p.id}',${p.detectedQty})">
+      <span>${ESC(p.name)}</span>
+      <span style="display:flex;align-items:center;gap:6px;"><span class="badge bg-gray">Qty: ${p.detectedQty}</span><span class="mono" style="font-size:.75rem;">${SYM()} ${p.selling_price.toFixed(2)}</span><span class="btn btn-dark btn-xs">Add</span></span>
+    </div>`).join('');
+  };
+  voiceRecog.onerror = () => { voiceActive = false; document.getElementById('voice-status').textContent = 'Error — try again'; };
+  voiceRecog.onend = () => { voiceActive = false; document.getElementById('voice-mic-btn').classList.remove('voice-active'); document.getElementById('voice-status').textContent = 'Stopped. Click mic to restart.'; };
+  voiceRecog.start();
+}
+function stopVoice() { voiceRecog?.stop(); voiceActive = false; }
+function addVoiceItem(id, qty = 1) {
+  for (let i = 0; i < qty; i++) addToCart(id);
+  toast(`Added ${qty}× item via voice`, 'success');
+  closeM('voice-ov'); stopVoice();
+}
+
+// ── SPLIT PAYMENT
+let splitLines = [];
+function openSplitPay() {
+  if (!cart.length) { toast('Cart is empty', 'error'); return; }
+  const net = parseFloat(document.getElementById('c-tot').textContent.replace(/[^0-9.]/g, '')) || 0;
+  document.getElementById('split-total').textContent = `${SYM()} ${net.toFixed(2)}`;
+  splitLines = [{ method: payMethods[0], amount: net }];
+  renderSplitLines();
+  openM('split-ov');
+}
+function renderSplitLines() {
+  const net = parseFloat(document.getElementById('split-total').textContent.replace(/[^0-9.]/g, '')) || 0;
+  const total = splitLines.reduce((s, l) => s + (parseFloat(l.amount) || 0), 0);
+  const rem = net - total;
+  document.getElementById('split-items').innerHTML = splitLines.map((l, i) => `
+    <div class="split-line">
+      <select onchange="splitLines[${i}].method=this.value">${payMethods.map(m => `<option${m === l.method ? ' selected' : ''}>${ESC(m)}</option>`).join('')}</select>
+      <input type="number" value="${l.amount}" step="0.01" min="0" oninput="splitLines[${i}].amount=parseFloat(this.value)||0;updateSplitRem()">
+      <button class="btn btn-red btn-xs" onclick="splitLines.splice(${i},1);renderSplitLines()">✕</button>
+    </div>`).join('');
+  document.getElementById('split-remaining').innerHTML = `<span style="color:${Math.abs(rem) < 0.01 ? 'var(--green)' : 'var(--red)'};">Remaining: ${SYM()} ${Math.abs(rem).toFixed(2)}${rem < 0 ? ' (over)' : ''}</span>`;
+}
+function addSplitLine() { splitLines.push({ method: payMethods[0], amount: 0 }); renderSplitLines(); }
+function updateSplitRem() { renderSplitLines(); }
+async function confirmSplitCheckout() {
+  const net = parseFloat(document.getElementById('split-total').textContent.replace(/[^0-9.]/g, '')) || 0;
+  const total = splitLines.reduce((s, l) => s + (parseFloat(l.amount) || 0), 0);
+  if (Math.abs(total - net) > 0.01) { toast('Amounts must equal total', 'error'); return; }
+  // Use first method as primary, store all in ref
+  const ref = splitLines.map(l => `${l.method}: ${SYM()}${parseFloat(l.amount).toFixed(2)}`).join(' | ');
+  closeM('split-ov');
+  // Set pay method to first split
+  document.querySelectorAll('.pay-opt').forEach(e => { if (e.textContent === splitLines[0].method) e.classList.add('sel'); else e.classList.remove('sel'); });
+  await checkout(0, ref);
+}
+
+// ── EXPIRY DATE TRACKING & AUTO DISCOUNT
+function checkExpiryAlerts() {
+  const today = new Date();
+  const warn3 = new Date(today); warn3.setDate(warn3.getDate() + 3);
+  products.forEach(p => {
+    if (!p.expiry_date) return;
+    const exp = new Date(p.expiry_date);
+    if (exp <= today) toast(`🚨 EXPIRED: ${p.name}`, 'error');
+    else if (exp <= warn3) toast(`⚠ Expiring soon: ${p.name} (${exp.toLocaleDateString()})`, 'warn');
+  });
+}
+
+// Expiry discount modal
+let expiryDiscProd = null;
+function openExpiryDisc(id) {
+  const p = products.find(x => x.id === id); if (!p) return;
+  expiryDiscProd = p;
+  document.getElementById('expd-pid').value = id;
+  document.getElementById('expd-pct').value = '';
+  document.getElementById('expd-preview').textContent = '';
+  const exp = p.expiry_date ? new Date(p.expiry_date).toLocaleDateString() : 'Not set';
+  document.getElementById('expd-prod-info').innerHTML = `<strong>${ESC(p.name)}</strong><br>Original Price: ${SYM()} ${p.selling_price.toFixed(2)}<br>Expiry: ${exp}`;
+  openM('expd-ov');
+}
+function setExpDisc(pct) {
+  document.getElementById('expd-pct').value = pct;
+  calcExpDisc();
+}
+function calcExpDisc() {
+  const pct = parseFloat(document.getElementById('expd-pct').value) || 0;
+  if (!expiryDiscProd || !pct) { document.getElementById('expd-preview').textContent = ''; return; }
+  const discAmt = expiryDiscProd.selling_price * pct / 100;
+  const newPrice = expiryDiscProd.selling_price - discAmt;
+  document.getElementById('expd-preview').textContent = `${pct}% off → ${SYM()} ${newPrice.toFixed(2)} (save ${SYM()} ${discAmt.toFixed(2)})`;
+}
+function applyExpDisc() {
+  const pct = parseFloat(document.getElementById('expd-pct').value) || 0;
+  if (!expiryDiscProd || !pct) { toast('Enter discount %', 'error'); return; }
+  const discAmt = expiryDiscProd.selling_price * pct / 100;
+  // Add to cart with overridden discount
+  const ex = cart.find(i => i.pid === expiryDiscProd.id);
+  if (ex) {
+    ex.itemDisc = discAmt;
+    ex.eff = ex.unitPrice - discAmt;
+    ex.tot = ex.eff * ex.qty;
+  } else {
+    cart.push({ pid: expiryDiscProd.id, name: expiryDiscProd.name + ` (${pct}% off)`, qty: 1, unitPrice: expiryDiscProd.selling_price, itemDisc: discAmt, eff: expiryDiscProd.selling_price - discAmt, tot: expiryDiscProd.selling_price - discAmt, label: '' });
+  }
+  renderCart(); calcTot();
+  closeM('expd-ov');
+  toast(`${pct}% expiry discount applied ✓`, 'success');
+}
+
+// Enhanced product grid with expiry badge + expiry discount button
+function renderPGrid(prods) {
+  const g = document.getElementById('pgrid');
+  if (!prods.length) { g.innerHTML = '<div class="es" style="grid-column:1/-1"><div class="es-icon">📦</div><p>No products found</p></div>'; return; }
+  const sym = SYM(); const today = new Date(); const warn3 = new Date(today); warn3.setDate(warn3.getDate() + 3);
+  g.innerHTML = prods.map(p => {
+    const d = p.item_discount || 0, ep = p.selling_price - d;
+    const isLow = p.stock_qty > 0 && p.stock_qty <= (p.low_stock_limit || 5), isOut = p.stock_qty <= 0;
+    const hasV = priceVariants[p.id]?.length > 0;
+    const stTxt = isOut ? 'Out of stock' : isLow ? `⚠ ${p.stock_qty} left` : `${p.stock_qty} in stock`;
+    const expDate = p.expiry_date ? new Date(p.expiry_date) : null;
+    const isExpired = expDate && expDate <= today;
+    const isExpiring = expDate && expDate > today && expDate <= warn3;
+    const expBadge = isExpired ? '<div class="exp-badge critical">EXPIRED</div>' : isExpiring ? '<div class="exp-badge">EXP SOON</div>' : '';
+    const discBtn = (isExpired || isExpiring) ? `<div onclick="event.stopPropagation();openExpiryDisc('${p.id}')" style="font-size:.62rem;background:rgba(255,176,32,.15);color:#7a4a00;border-radius:3px;padding:1px 5px;margin-top:2px;cursor:pointer;">⚡ Quick Disc</div>` : '';
+    return `<div class="pcard${isLow ? ' low' : ''}${isOut ? ' out' : ''}${hasV ? ' multi-price' : ''}${isExpired ? ' out' : ''}" onclick="addToCart('${p.id}')">
+      ${hasV ? '<div class="multi-badge">MULTI</div>' : ''}
+      ${expBadge}
+      <div class="p-icon">${catIcon(p.category)}</div>
+      <div class="p-name">${ESC(p.name)}</div>
+      ${d > 0 ? `<div class="p-orig">${sym} ${p.selling_price.toFixed(2)}</div>` : ''}
+      <div class="p-price">${sym} ${ep.toFixed(2)}</div>
+      <div class="p-stock${isLow ? ' low' : ''}${isOut ? ' out' : ''}">${stTxt}</div>
+      ${discBtn}
+    </div>`;
+  }).join('');
+}
+
+// ── REPORTS PAGE
+function rtab(el, id) {
+  document.querySelectorAll('.rtab-body').forEach(e => e.style.display = 'none');
+  document.querySelectorAll('.tab-bar .tab-item').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).style.display = 'block';
+  el.classList.add('active');
+  if (id === 'rpt-sales') loadRSales();
+  if (id === 'rpt-inventory') renderRInv(products);
+  if (id === 'rpt-customers') renderRCust(customers);
+  if (id === 'rpt-products') loadRProds();
+  if (id === 'rpt-payment') loadRPayments();
+  if (id === 'rpt-zreport') { const d = new Date().toISOString().split('T')[0]; document.getElementById('z-date').value = d; }
+  if (id === 'rpt-expenses') loadExpenses();
+}
+
+let allRSales = [];
+async function loadRSales() {
+  const sym = SYM();
+  let q = sb.from('sales').select('*,customers(name,mobile_number)').order('created_at', { ascending: false }).limit(500);
+  const f = document.getElementById('r-sf')?.value, t = document.getElementById('r-st')?.value;
+  const ss = document.getElementById('r-ss')?.value, pf = document.getElementById('r-pay-f')?.value;
+  if (f) q = q.gte('created_at', f + 'T00:00:00');
+  if (t) q = q.lte('created_at', t + 'T23:59:59');
+  if (ss) q = q.eq('status', ss);
+  if (pf) q = q.eq('payment_method', pf);
+  const { data } = await q;
+  allRSales = data || [];
+  renderRSales(allRSales);
+  // Payment filter options
+  const methods = [...new Set(allRSales.map(s => s.payment_method).filter(Boolean))];
+  const pf_el = document.getElementById('r-pay-f');
+  if (pf_el) pf_el.innerHTML = '<option value="">All payments</option>' + methods.map(m => `<option>${ESC(m)}</option>`).join('');
+}
+function filterRSales() {
+  const q = (document.getElementById('r-sales-q')?.value || '').toLowerCase();
+  renderRSales(q ? allRSales.filter(s => s.id.includes(q) || (s.customers?.name || '').toLowerCase().includes(q) || (s.payment_method || '').toLowerCase().includes(q)) : allRSales);
+}
+function renderRSales(rows) {
+  const sym = SYM();
+  const total = rows.filter(s => s.status === 'completed').reduce((s, x) => s + x.net_amount, 0);
+  const count = rows.length;
+  const avg = count ? total / rows.filter(s => s.status === 'completed').length || 0 : 0;
+  document.getElementById('r-sales-sum').textContent = `${count} records · Revenue: ${sym} ${total.toFixed(2)}`;
+  // Stats
+  const sc = document.getElementById('r-sales-stats');
+  if (sc) sc.innerHTML = `
+    <div class="sc dk"><div class="sc-lbl">Total Revenue</div><div class="sc-val">${sym} ${Math.round(total).toLocaleString()}</div></div>
+    <div class="sc"><div class="sc-lbl">Transactions</div><div class="sc-val">${rows.filter(s => s.status === 'completed').length}</div></div>
+    <div class="sc"><div class="sc-lbl">Avg Order</div><div class="sc-val">${sym} ${isNaN(avg) ? '0' : Math.round(avg)}</div></div>
+    <div class="sc"><div class="sc-lbl">Refunds</div><div class="sc-val" style="color:var(--red)">${rows.filter(s => s.status === 'refunded').length}</div></div>`;
+  const tb = document.getElementById('r-sales-tb');
+  if (!tb) return;
+  if (!rows.length) { tb.innerHTML = `<tr><td colspan="9"><div class="es">No data</div></td></tr>`; return; }
+  tb.innerHTML = rows.map(s => {
+    const dt = new Date(s.created_at);
+    const badge = s.status === 'refunded' ? '<span class="badge bg-red">Refunded</span>' : '<span class="badge bg-green">Done</span>';
+    return `<tr>
+      <td><code style="font-size:.7rem">#${s.id.slice(-8).toUpperCase()}</code></td>
+      <td style="font-size:.75rem;">${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+      <td>${s.customers ? ESC(s.customers.name) : '<span class="text-muted">Walk-in</span>'}</td>
+      <td><span class="badge bg-blue" style="font-size:.65rem;">${ESC(s.customer_type || 'Walk-in')}</span></td>
+      <td><span class="badge bg-gray" style="font-size:.65rem;">${ESC(s.payment_method || 'Cash')}</span></td>
+      <td class="mono">${sym} ${s.sub_total.toFixed(2)}</td>
+      <td class="mono text-red">${s.bill_discount > 0 ? `-${sym} ${s.bill_discount.toFixed(2)}` : '—'}</td>
+      <td class="mono fw7">${sym} ${s.net_amount.toFixed(2)}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+}
+function clearRFilter() {
+  ['r-sf', 'r-st', 'r-sales-q'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const ss = document.getElementById('r-ss'); if (ss) ss.value = '';
+  loadRSales();
+}
+
+function renderRInv(prods) {
+  const sym = SYM();
+  const q = (document.getElementById('r-inv-q')?.value || '').toLowerCase();
+  const f = document.getElementById('r-inv-f')?.value || '';
+  let r = prods;
+  if (q) r = r.filter(p => p.name.toLowerCase().includes(q) || (p.barcode || '').includes(q));
+  if (f === 'low') r = r.filter(p => p.stock_qty > 0 && p.stock_qty <= (p.low_stock_limit || 5));
+  if (f === 'out') r = r.filter(p => p.stock_qty <= 0);
+  if (f === 'sugar') r = r.filter(p => p.is_sugar);
+  const tb = document.getElementById('r-inv-tb'); if (!tb) return;
+  const totalValue = r.reduce((s, p) => s + (p.stock_qty * p.selling_price), 0);
+  if (!r.length) { tb.innerHTML = `<tr><td colspan="8"><div class="es">No products</div></td></tr>`; return; }
+  tb.innerHTML = r.map(p => {
+    const isLow = p.stock_qty > 0 && p.stock_qty <= (p.low_stock_limit || 5), isOut = p.stock_qty <= 0;
+    const badge = isOut ? '<span class="badge bg-red">Out</span>' : isLow ? '<span class="badge bg-amber">Low</span>' : '<span class="badge bg-green">OK</span>';
+    return `<tr>
+      <td class="fw7">${ESC(p.name)}</td>
+      <td>${ESC(p.category || '—')}</td>
+      <td>${p.barcode ? `<code>${ESC(p.barcode)}</code>` : '—'}</td>
+      <td class="mono">${sym} ${(p.cost_price || 0).toFixed(2)}</td>
+      <td class="mono">${sym} ${p.selling_price.toFixed(2)}</td>
+      <td>${badge} <span class="mono">${p.stock_qty}</span></td>
+      <td class="mono">${sym} ${(p.stock_qty * p.selling_price).toFixed(2)}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('') + `<tr style="font-weight:700;border-top:2px solid var(--border2);"><td colspan="6">Total Stock Value</td><td class="mono">${sym} ${totalValue.toFixed(2)}</td><td></td></tr>`;
+}
+function filterRInv() { renderRInv(products); }
+
+function renderRCust(custs) {
+  const sym = SYM();
+  const q = (document.getElementById('r-cust-q')?.value || '').toLowerCase();
+  const sort = document.getElementById('r-cust-sort')?.value || 'spent';
+  let r = q ? custs.filter(c => c.name.toLowerCase().includes(q) || c.mobile_number.includes(q)) : [...custs];
+  r.sort((a, b) => sort === 'spent' ? (b.total_spent || 0) - (a.total_spent || 0) : sort === 'pts' ? (b.loyalty_points || 0) - (a.loyalty_points || 0) : a.name.localeCompare(b.name));
+  const tb = document.getElementById('r-cust-tb'); if (!tb) return;
+  if (!r.length) { tb.innerHTML = `<tr><td colspan="7"><div class="es">No customers</div></td></tr>`; return; }
+  tb.innerHTML = r.map((c, i) => `<tr>
+    <td><strong>${ESC(c.name)}</strong></td>
+    <td class="mono">${c.mobile_number}</td>
+    <td><span class="badge bg-blue">${ESC(c.customer_type || 'Walk-in')}</span></td>
+    <td><span class="badge bg-green">⭐ ${c.loyalty_points || 0}</span></td>
+    <td class="mono fw7">${sym} ${(c.total_spent || 0).toFixed(2)}</td>
+    <td>—</td>
+    <td style="font-size:.75rem;color:var(--ink3);">${new Date(c.created_at).toLocaleDateString()}</td>
+  </tr>`).join('');
+}
+function filterRCust() { renderRCust(customers); }
+
+async function loadRProds() {
+  const sym = SYM();
+  let q = sb.from('sale_items').select('product_id,qty,total_price,unit_price,products(name,category)');
+  const sf = document.getElementById('r-prod-sf')?.value, st = document.getElementById('r-prod-st')?.value;
+  if (sf) q = q.gte('created_at', sf + 'T00:00:00');
+  if (st) q = q.lte('created_at', st + 'T23:59:59');
+  const { data } = await q;
+  const pm = {};
+  (data || []).forEach(i => {
+    const k = i.product_id; if (!pm[k]) pm[k] = { name: i.products?.name || '?', cat: i.products?.category || '', qty: 0, rev: 0 };
+    pm[k].qty += i.qty; pm[k].rev += i.total_price;
+  });
+  const tops = Object.values(pm).sort((a, b) => b.rev - a.rev);
+  const tb = document.getElementById('r-prod-tb'); if (!tb) return;
+  tb.innerHTML = tops.map((p, i) => `<tr>
+    <td><span class="badge bg-gray">#${i + 1}</span></td>
+    <td class="fw7">${ESC(p.name)}</td>
+    <td>${ESC(p.cat || '—')}</td>
+    <td><span class="badge bg-green">${p.qty}</span></td>
+    <td class="mono fw7">${sym} ${p.rev.toFixed(2)}</td>
+    <td class="mono">${sym} ${p.qty ? (p.rev / p.qty).toFixed(2) : '0.00'}</td>
+  </tr>`).join('') || `<tr><td colspan="6"><div class="es">No data</div></td></tr>`;
+}
+
+async function loadRPayments() {
+  const sym = SYM();
+  let q = sb.from('sales').select('payment_method,net_amount,status').eq('status', 'completed');
+  const sf = document.getElementById('r-pay-sf')?.value, st = document.getElementById('r-pay-st')?.value;
+  if (sf) q = q.gte('created_at', sf + 'T00:00:00');
+  if (st) q = q.lte('created_at', st + 'T23:59:59');
+  const { data } = await q;
+  const pm = {}; const total = (data || []).reduce((s, x) => s + x.net_amount, 0);
+  (data || []).forEach(s => { const k = s.payment_method || 'Cash'; if (!pm[k]) pm[k] = { cnt: 0, rev: 0 }; pm[k].cnt++; pm[k].rev += s.net_amount; });
+  const sc = document.getElementById('r-pay-stats');
+  if (sc) sc.innerHTML = `<div class="sc dk"><div class="sc-lbl">Total Revenue</div><div class="sc-val">${sym} ${Math.round(total).toLocaleString()}</div></div>` + Object.entries(pm).map(([k, v]) => `<div class="sc"><div class="sc-lbl">${ESC(k)}</div><div class="sc-val">${sym} ${Math.round(v.rev).toLocaleString()}</div><div class="sc-sub">${v.cnt} transactions</div></div>`).join('');
+  const tb = document.getElementById('r-pay-tb'); if (!tb) return;
+  tb.innerHTML = Object.entries(pm).sort((a, b) => b[1].rev - a[1].rev).map(([k, v]) => {
+    const pct = total ? (v.rev / total * 100).toFixed(1) : 0;
+    return `<tr>
+      <td><span class="badge bg-blue">${ESC(k)}</span></td>
+      <td class="fw7">${v.cnt}</td>
+      <td class="mono fw7">${sym} ${v.rev.toFixed(2)}</td>
+      <td><div style="display:flex;align-items:center;gap:8px;">${pct}%<div class="r-stat-bar" style="flex:1;"><div class="r-stat-fill" style="width:${pct}%"></div></div></div></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="4"><div class="es">No data</div></td></tr>`;
+}
+
+async function loadZReport() {
+  const sym = SYM(); const date = document.getElementById('z-date').value;
+  if (!date) { toast('Select a date', 'warn'); return; }
+  const { data: sales } = await sb.from('sales').select('*,customers(name)').gte('created_at', date + 'T00:00:00').lte('created_at', date + 'T23:59:59');
+  const completed = (sales || []).filter(s => s.status === 'completed');
+  const refunded = (sales || []).filter(s => s.status === 'refunded');
+  const revenue = completed.reduce((s, x) => s + x.net_amount, 0);
+  const discounts = completed.reduce((s, x) => s + (x.bill_discount || 0) + (x.voucher_discount || 0), 0);
+  const cashSales = completed.filter(s => s.payment_method === 'Cash').reduce((s, x) => s + x.net_amount, 0);
+  const payBrk = {}; completed.forEach(s => { const k = s.payment_method || 'Cash'; if (!payBrk[k]) payBrk[k] = 0; payBrk[k] += s.net_amount; });
+  document.getElementById('z-report-body').innerHTML = `
+    <div class="card" style="font-family:var(--font-m);font-size:.82rem;">
+      <div style="text-align:center;border-bottom:1px dashed var(--border2);padding-bottom:.75rem;margin-bottom:.75rem;">
+        <div style="font-size:1rem;font-weight:700;">${ESC(settings.shop_name || 'My Shop')}</div>
+        <div style="color:var(--ink3);font-size:.75rem;">Z-REPORT — ${new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        <div>Total Transactions:</div><div style="text-align:right;font-weight:700;">${completed.length}</div>
+        <div>Gross Revenue:</div><div style="text-align:right;font-weight:700;">${sym} ${revenue.toFixed(2)}</div>
+        <div>Total Discounts:</div><div style="text-align:right;color:var(--red);">- ${sym} ${discounts.toFixed(2)}</div>
+        <div>Refunds:</div><div style="text-align:right;color:var(--red);">${refunded.length} (${sym} ${refunded.reduce((s, x) => s + x.net_amount, 0).toFixed(2)})</div>
+        <div style="font-weight:700;padding-top:6px;border-top:1px dashed var(--border2);">Net Revenue:</div>
+        <div style="text-align:right;font-weight:700;padding-top:6px;border-top:1px dashed var(--border2);font-size:1.05rem;">${sym} ${revenue.toFixed(2)}</div>
+      </div>
+      <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px dashed var(--border2);">
+        <div style="font-weight:700;margin-bottom:6px;">Payment Breakdown</div>
+        ${Object.entries(payBrk).map(([k, v]) => `<div style="display:flex;justify-content:space-between;"><span>${ESC(k)}</span><span>${sym} ${v.toFixed(2)}</span></div>`).join('')}
+      </div>
+      <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px dashed var(--border2);">
+        <div style="font-weight:700;margin-bottom:4px;">Expected Cash in Drawer</div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--ink);">${sym} ${cashSales.toFixed(2)}</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <div class="card-title">Cash Drawer Verification</div>
+      <div class="fg"><label>Physical cash counted in drawer (${sym})</label><input type="number" id="z-physical-cash" placeholder="0.00" step="0.01" oninput="calcDiscrepancy(${cashSales})"></div>
+      <div id="z-discrepancy" style="font-size:.85rem;margin-top:.5rem;"></div>
+    </div>`;
+}
+function calcDiscrepancy(expected) {
+  const physical = parseFloat(document.getElementById('z-physical-cash')?.value) || 0;
+  const diff = physical - expected;
+  const el = document.getElementById('z-discrepancy');
+  if (!el) return;
+  if (Math.abs(diff) < 0.01) el.innerHTML = `<span style="color:var(--green);font-weight:600;">✓ Drawer balances perfectly!</span>`;
+  else if (diff > 0) el.innerHTML = `<span style="color:var(--amber);font-weight:600;">⚠ Over by ${SYM()} ${diff.toFixed(2)}</span>`;
+  else el.innerHTML = `<span style="color:var(--red);font-weight:600;">⚠ Short by ${SYM()} ${Math.abs(diff).toFixed(2)}</span>`;
+}
+
+// ── EXPENSES
+let expenses = [];
+async function loadExpenses() {
+  const sym = SYM();
+  let q = sb.from('expenses').select('*').order('date', { ascending: false }).limit(200);
+  const sf = document.getElementById('r-exp-sf')?.value, st = document.getElementById('r-exp-st')?.value;
+  if (sf) q = q.gte('date', sf); if (st) q = q.lte('date', st);
+  const { data } = await q;
+  expenses = data || [];
+  filterRExp();
+}
+function filterRExp() {
+  const q = (document.getElementById('r-exp-q')?.value || '').toLowerCase();
+  let r = expenses;
+  if (q) r = r.filter(e => (e.description || '').toLowerCase().includes(q) || (e.category || '').toLowerCase().includes(q));
+  const total = r.reduce((s, e) => s + (e.amount || 0), 0);
+  const sc = document.getElementById('r-exp-stats');
+  if (sc) sc.innerHTML = `<div class="sc dk"><div class="sc-lbl">Total Expenses</div><div class="sc-val">${SYM()} ${total.toFixed(2)}</div></div><div class="sc"><div class="sc-lbl">Count</div><div class="sc-val">${r.length}</div></div>`;
+  const tb = document.getElementById('r-exp-tb'); if (!tb) return;
+  tb.innerHTML = r.map(e => `<tr>
+    <td>${e.date || '—'}</td>
+    <td><span class="badge bg-blue">${ESC(e.category || 'Other')}</span></td>
+    <td>${ESC(e.description || '—')}</td>
+    <td class="mono fw7">${SYM()} ${(e.amount || 0).toFixed(2)}</td>
+    <td style="font-size:.75rem;color:var(--ink3);">${ESC(e.recorded_by || '—')}</td>
+  </tr>`).join('') || `<tr><td colspan="5"><div class="es">No expenses</div></td></tr>`;
+}
+function openExpM() {
+  document.getElementById('exp-desc').value = '';
+  document.getElementById('exp-amt').value = '';
+  document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
+  openM('exp-ov');
+}
+async function saveExpense() {
+  const cat = document.getElementById('exp-cat').value;
+  const desc = document.getElementById('exp-desc').value.trim();
+  const amt = parseFloat(document.getElementById('exp-amt').value);
+  const date = document.getElementById('exp-date').value;
+  if (!desc || isNaN(amt) || amt <= 0) { toast('Fill all fields', 'error'); return; }
+  const { error } = await sb.from('expenses').insert({ category: cat, description: desc, amount: amt, date, recorded_by: currentUser.email });
+  if (error) { toast('Failed: ' + error.message, 'error'); return; }
+  toast('Expense saved ✓', 'success');
+  closeM('exp-ov'); loadExpenses();
+}
+
+// ── ENHANCED REPORTS PDF
+async function expRPDF(type) {
+  const { jsPDF } = window.jspdf;
+  const sym = SYM(); const shop = settings.shop_name || 'My Shop'; const now = new Date().toLocaleString();
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const headerH = (title) => {
+    if (settings.logo_url) { try { doc.addImage(settings.logo_url, 'JPEG', 14, 8, 20, 20); } catch (e) { } }
+    doc.setFontSize(16); doc.setFont(undefined, 'bold'); doc.text(shop, settings.logo_url ? 38 : 14, 16);
+    if (settings.phone) { doc.setFontSize(8); doc.setFont(undefined, 'normal'); doc.setTextColor(100); doc.text(settings.phone + (settings.address ? ' · ' + settings.address : ''), settings.logo_url ? 38 : 14, 22); }
+    doc.setTextColor(0); doc.setFontSize(13); doc.setFont(undefined, 'bold'); doc.text(title, 14, 34);
+    doc.setFontSize(8); doc.setFont(undefined, 'normal'); doc.setTextColor(120); doc.text(`Generated: ${now}`, 14, 40); doc.setTextColor(0);
+    return 48;
+  };
+  const footer = () => {
+    const p = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= p; i++) { doc.setPage(i); doc.setFontSize(7); doc.setTextColor(150); doc.text(`POS by NextGenIT & Lakshan · ${shop} · Page ${i}/${p}`, 14, doc.internal.pageSize.height - 8); doc.setTextColor(0); }
+  };
+
+  if (type === 'sales' || type === 'daily' || type === 'monthly' || type === 'cashier' || type === 'payment-summary') {
+    const y = headerH(type === 'daily' ? 'Daily Sales Report' : type === 'monthly' ? 'Monthly Sales Report' : type === 'cashier' ? 'Cashier Report' : type === 'payment-summary' ? 'Payment Summary' : 'Sales Report');
+    const { data } = await sb.from('sales').select('*,customers(name)').order('created_at', { ascending: false }).limit(1000);
+    if (type === 'payment-summary') {
+      const pm = {}; (data || []).filter(s => s.status === 'completed').forEach(s => { const k = s.payment_method || 'Cash'; if (!pm[k]) pm[k] = { cnt: 0, rev: 0 }; pm[k].cnt++; pm[k].rev += s.net_amount; });
+      doc.autoTable({ startY: y, head: [['Payment Method', 'Transactions', 'Revenue']], body: Object.entries(pm).map(([k, v]) => [k, v.cnt, `${sym} ${v.rev.toFixed(2)}`]), styles: { fontSize: 9 }, headStyles: { fillColor: [13, 13, 13] } });
+    } else {
+      doc.autoTable({ startY: y, head: [['Invoice', 'Date', 'Customer', 'Payment', 'Sub', 'Disc', 'Total', 'Status']], body: (data || []).map(s => [`#${s.id.slice(-8).toUpperCase()}`, new Date(s.created_at).toLocaleString(), s.customers?.name || 'Walk-in', s.payment_method || 'Cash', `${sym}${s.sub_total.toFixed(2)}`, `${sym}${(s.bill_discount || 0).toFixed(2)}`, `${sym}${s.net_amount.toFixed(2)}`, s.status]), styles: { fontSize: 7 }, headStyles: { fillColor: [13, 13, 13] }, alternateRowStyles: { fillColor: [245, 245, 242] } });
+      const total = (data || []).filter(s => s.status === 'completed').reduce((s, x) => s + x.net_amount, 0);
+      const fy = doc.lastAutoTable.finalY + 6;
+      doc.setFontSize(10); doc.setFont(undefined, 'bold'); doc.text(`Total Revenue: ${sym} ${total.toFixed(2)}`, 14, fy);
+    }
+  } else if (type === 'inventory') {
+    const y = headerH('Inventory Report');
+    const totalVal = products.reduce((s, p) => s + p.stock_qty * p.selling_price, 0);
+    doc.autoTable({ startY: y, head: [['Product', 'Category', 'Barcode', 'Cost', 'Price', 'Stock', 'Value', 'Status']], body: products.map(p => { const isLow = p.stock_qty <= p.low_stock_limit && p.stock_qty > 0, isOut = p.stock_qty <= 0; return [p.name, p.category || '', p.barcode || '', `${sym}${(p.cost_price || 0).toFixed(2)}`, `${sym}${p.selling_price.toFixed(2)}`, p.stock_qty, `${sym}${(p.stock_qty * p.selling_price).toFixed(2)}`, isOut ? 'Out' : isLow ? 'Low' : 'OK']; }), styles: { fontSize: 7 }, headStyles: { fillColor: [13, 13, 13] }, alternateRowStyles: { fillColor: [245, 245, 242] } });
+    const fy = doc.lastAutoTable.finalY + 6; doc.setFontSize(9); doc.setFont(undefined, 'bold'); doc.text(`Total Stock Value: ${sym} ${totalVal.toFixed(2)}`, 14, fy);
+  } else if (type === 'customers') {
+    const y = headerH('Customer Report');
+    doc.autoTable({ startY: y, head: [['Name', 'Mobile', 'Type', 'Points', 'Total Spent', 'Joined']], body: customers.map(c => [c.name, c.mobile_number, c.customer_type || 'Walk-in', c.loyalty_points || 0, `${sym}${(c.total_spent || 0).toFixed(2)}`, new Date(c.created_at).toLocaleDateString()]), styles: { fontSize: 8 }, headStyles: { fillColor: [13, 13, 13] }, alternateRowStyles: { fillColor: [245, 245, 242] } });
+  } else if (type === 'top-products') {
+    const y = headerH('Top Products Report');
+    const rows = Array.from(document.querySelectorAll('#r-prod-tb tr')).map(r => [...r.querySelectorAll('td')].map(td => td.textContent.trim())).filter(r => r.length > 0);
+    doc.autoTable({ startY: y, head: [['Rank', 'Product', 'Category', 'Qty Sold', 'Revenue', 'Avg Price']], body: rows, styles: { fontSize: 8 }, headStyles: { fillColor: [13, 13, 13] } });
+  } else if (type === 'vouchers') {
+    const y = headerH('Gift Vouchers Report');
+    doc.autoTable({ startY: y, head: [['Code', 'Value', 'Balance', 'Status', 'Expires', 'Notes']], body: vouchers.map(v => [v.code, `${sym}${v.value.toFixed(2)}`, `${sym}${(v.balance || v.value).toFixed(2)}`, v.status, v.expires_at ? new Date(v.expires_at).toLocaleDateString() : '—', v.notes || '']), styles: { fontSize: 8 }, headStyles: { fillColor: [13, 13, 13] } });
+  } else if (type === 'expenses') {
+    const y = headerH('Expenses Report');
+    const total = expenses.reduce((s, e) => s + (e.amount || 0), 0);
+    doc.autoTable({ startY: y, head: [['Date', 'Category', 'Description', 'Amount', 'By']], body: expenses.map(e => [e.date || '', e.category || '', e.description || '', `${sym}${(e.amount || 0).toFixed(2)}`, e.recorded_by || '']), styles: { fontSize: 8 }, headStyles: { fillColor: [13, 13, 13] } });
+    const fy = doc.lastAutoTable.finalY + 6; doc.setFontSize(9); doc.setFont(undefined, 'bold'); doc.text(`Total Expenses: ${sym} ${total.toFixed(2)}`, 14, fy);
+  } else if (type === 'zreport') {
+    const y = headerH('Z-Report / Day-End Report');
+    const zContent = document.getElementById('z-report-body')?.textContent || '';
+    doc.setFontSize(9); doc.text('See on-screen Z-Report for details', 14, y + 5);
+  } else if (type === 'dashboard') {
+    const y = headerH('Dashboard / Business Summary');
+    const rows = [['Revenue', document.getElementById('d-rev')?.textContent || ''], ['Sales Count', document.getElementById('d-cnt')?.textContent || ''], ['Avg Order', document.getElementById('d-avg')?.textContent || ''], ['Customers', document.getElementById('d-custs')?.textContent || ''], ['Low Stock', document.getElementById('d-low')?.textContent || '']];
+    doc.autoTable({ startY: y, head: [['Metric', 'Value']], body: rows, styles: { fontSize: 9 }, headStyles: { fillColor: [13, 13, 13] } });
+    const fy = doc.lastAutoTable.finalY + 10;
+    const topRows = Array.from(document.querySelectorAll('#d-tops tr')).map(r => [...r.querySelectorAll('td')].map(td => td.textContent.trim())).filter(r => r.length > 0);
+    if (topRows.length) { doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text('Top Products', 14, fy); doc.autoTable({ startY: fy + 5, head: [['Product', 'Qty', 'Revenue']], body: topRows, styles: { fontSize: 9 }, headStyles: { fillColor: [13, 13, 13] } }); }
+  } else if (type === 'payments') {
+    const y = headerH('Payment Methods Report');
+    const rows = Array.from(document.querySelectorAll('#r-pay-tb tr')).map(r => [...r.querySelectorAll('td')].map(td => td.textContent.trim().replace(/\s+/g, ' ')).filter((_, i) => i < 3)).filter(r => r.length > 0);
+    doc.autoTable({ startY: y, head: [['Method', 'Count', 'Total']], body: rows, styles: { fontSize: 9 }, headStyles: { fillColor: [13, 13, 13] } });
+  }
+  footer();
+  doc.save(`${type}_report_${new Date().toISOString().slice(0, 10)}.pdf`);
+  toast('PDF downloaded ✓', 'success');
+}
+
+// ── SALES TABLE FILTER (client-side)
+let allSalesData = [];
+function filterSalesTable() {
+  const q = (document.getElementById('sales-q')?.value || '').toLowerCase();
+  if (!q) { renderSalesTable(allSalesData); return; }
+  renderSalesTable(allSalesData.filter(s => s.id.toLowerCase().includes(q) || (s.customers?.name || '').toLowerCase().includes(q) || (s.payment_method || '').toLowerCase().includes(q)));
+}
+function renderSalesTable(rows) {
+  const sym = SYM();
+  const total = rows.filter(s => s.status === 'completed').reduce((s, x) => s + x.net_amount, 0);
+  document.getElementById('sales-sum').textContent = `${rows.length} records · ${sym} ${total.toFixed(2)}`;
+  const tb = document.getElementById('sales-tb');
+  if (!rows.length) { tb.innerHTML = `<tr><td colspan="7"><div class="es">No sales found</div></td></tr>`; return; }
+  tb.innerHTML = rows.map(s => {
+    const dt = new Date(s.created_at);
+    const badge = s.status === 'refunded' ? '<span class="badge bg-red">Refunded</span>' : '<span class="badge bg-green">Completed</span>';
+    return `<tr>
+      <td><code style="font-size:.72rem">#${s.id.slice(-10).toUpperCase()}</code></td>
+      <td style="font-size:.75rem;">${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+      <td class="hm">${s.customers ? ESC(s.customers.name) : '<span class="text-muted">Walk-in</span>'}</td>
+      <td class="hm"><span class="badge bg-blue" style="font-size:.68rem;">${ESC(s.payment_method || 'Cash')}</span></td>
+      <td class="fw7 mono">${sym} ${s.net_amount.toFixed(2)}</td>
+      <td>${badge}</td>
+      <td><div style="display:flex;gap:3px;">
+        <button class="btn btn-ghost btn-xs" onclick="viewSale('${s.id}')">View</button>
+        <button class="btn btn-ghost btn-xs" onclick="printSale('${s.id}')">🖨</button>
+        ${s.status !== 'refunded' ? `<button class="btn btn-red btn-xs" onclick="openRefund('${s.id}')">Refund</button>` : ''}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// Override loadSales to store allSalesData
+const _origLoadSales = loadSales;
+async function loadSales() {
+  let q = sb.from('sales').select('*,customers(name,mobile_number)').order('created_at', { ascending: false }).limit(200);
+  const f = document.getElementById('sf')?.value, t = document.getElementById('st')?.value, ss = document.getElementById('ss')?.value;
+  if (f) q = q.gte('created_at', f + 'T00:00:00');
+  if (t) q = q.lte('created_at', t + 'T23:59:59');
+  if (ss) q = q.eq('status', ss);
+  const { data, error } = await q;
+  if (error) { toast('Failed to load sales', 'error'); return; }
+  allSalesData = data || [];
+  renderSalesTable(allSalesData);
+}
+
+// ── GO PAGE OVERRIDE (add reports)
+const _origGo = go;
+function go(pg) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tnav-btn').forEach(t => t.classList.remove('active'));
+  const el = document.getElementById('page-' + pg); if (el) el.classList.add('active');
+  const tb = document.querySelector(`[data-page="${pg}"]`); if (tb) tb.classList.add('active');
+  if (pg === 'sales') loadSales();
+  if (pg === 'dashboard') loadDash();
+  if (pg === 'vouchers') loadVouchers();
+  if (pg === 'reports') { loadRSales(); }
+  window.scrollTo(0, 0);
+}
+
+// ── CHECK EXPIRY ON LOAD
+const _origInit = init;
+async function init() {
+  await _origInit.call(this);
+  setTimeout(checkExpiryAlerts, 2000);
+}
+
+// ── ENHANCED VOUCHER RENDER IN REPORTS TAB
+function expPDF(type) { return expRPDF(type); }
+
+// ── SETTINGS: SMS/Email notification stubs
+function saveSMSSettings() {
+  const apiKey = document.getElementById('sms-api-key')?.value;
+  const sender = document.getElementById('sms-sender')?.value;
+  if (apiKey) { settings.sms_api_key = apiKey; settings.sms_sender = sender; toast('SMS settings saved (configure your provider)', 'success'); }
+}
+function saveEmailSettings() {
+  const smtpHost = document.getElementById('email-host')?.value;
+  if (smtpHost) { settings.email_host = smtpHost; toast('Email settings saved', 'success'); }
+}
+
+console.log('POS v3 additions loaded ✓');
 </script>
+</body>
+</html>
