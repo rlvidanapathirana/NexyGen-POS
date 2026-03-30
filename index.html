@@ -1,101 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>POS — Sign In</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--ink:#0d0d0d;--ink2:#3a3a3a;--ink3:#888;--paper:#f5f5f2;--surface:#fff;--accent:#c8f55a;--accent-ink:#1a2800;--red:#ff4757;--green:#2ed47a;--border:rgba(0,0,0,.1);--r:14px;--r-sm:9px;}
-body{font-family:'DM Sans',sans-serif;background:var(--paper);min-height:100vh;display:grid;grid-template-columns:1fr 1fr;}
-.left{background:var(--ink);display:flex;flex-direction:column;justify-content:space-between;padding:3rem;overflow:hidden;position:relative;}
-.left::after{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(200,245,90,.12) 0%,transparent 70%);top:-80px;left:-80px;pointer-events:none;}
-.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#fff;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;}
-.brand-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);}
-.hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:2.8rem;line-height:1.1;color:#fff;letter-spacing:-.03em;margin-bottom:1rem;}
-.hero h1 em{color:var(--accent);font-style:normal;}
-.hero p{color:rgba(255,255,255,.45);font-size:.95rem;line-height:1.7;max-width:320px;}
-.pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:1.5rem;}
-.pill{padding:5px 13px;border-radius:100px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);font-size:.75rem;}
-.left-foot{color:rgba(255,255,255,.25);font-size:.75rem;}
-.right{display:flex;align-items:center;justify-content:center;padding:2rem;}
-.box{width:100%;max-width:400px;}
-.box-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.7rem;color:var(--ink);letter-spacing:-.02em;margin-bottom:.3rem;}
-.box-sub{color:var(--ink3);font-size:.88rem;margin-bottom:1.5rem;}
-.status{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;font-size:.75rem;font-weight:500;border:1px solid;margin-bottom:1.25rem;}
-.status.ok{background:rgba(46,212,122,.1);color:#1a7a4a;border-color:rgba(46,212,122,.3);}
-.status.err{background:rgba(255,71,87,.1);color:#c0392b;border-color:rgba(255,71,87,.3);}
-.status.wait{background:rgba(0,0,0,.05);color:var(--ink3);border-color:var(--border);}
-.dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
-.dot.pulse{animation:p 1.4s infinite;}
-@keyframes p{0%,100%{opacity:1}50%{opacity:.2}}
-.fg{margin-bottom:.9rem;}
-label{display:block;font-size:.78rem;font-weight:500;color:var(--ink2);margin-bottom:5px;}
-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:.92rem;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink);outline:none;transition:border .15s;}
-input:focus{border-color:var(--ink);}
-.btn-login{width:100%;padding:13px;border:none;border-radius:var(--r-sm);background:var(--ink);color:#fff;font-size:.95rem;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;letter-spacing:-.01em;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn-login:hover{background:#222;}
-.btn-login:disabled{opacity:.5;cursor:not-allowed;}
-.err-box{background:rgba(255,71,87,.07);border:1px solid rgba(255,71,87,.2);color:var(--red);border-radius:var(--r-sm);padding:10px 13px;font-size:.83rem;margin-top:.75rem;display:none;}
-.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:s .6s linear infinite;}
-@keyframes s{to{transform:rotate(360deg)}}
-@media(max-width:700px){body{grid-template-columns:1fr;}.left{display:none;}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>POS — Sign In</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --ink: #0d0d0d;
+      --ink2: #3a3a3a;
+      --ink3: #888;
+      --paper: #f5f5f2;
+      --surface: #fff;
+      --accent: #c8f55a;
+      --accent-ink: #1a2800;
+      --red: #ff4757;
+      --green: #2ed47a;
+      --border: rgba(0, 0, 0, .1);
+      --r: 14px;
+      --r-sm: 9px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .left {
+      background: var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .left::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(200, 245, 90, .12) 0%, transparent 70%);
+      top: -80px;
+      left: -80px;
+      pointer-events: none;
+    }
+
+    .brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #fff;
+      letter-spacing: -.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      line-height: 1.1;
+      color: #fff;
+      letter-spacing: -.03em;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .hero p {
+      color: rgba(255, 255, 255, .45);
+      font-size: .95rem;
+      line-height: 1.7;
+      max-width: 320px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 1.5rem;
+    }
+
+    .pill {
+      padding: 5px 13px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: rgba(255, 255, 255, .65);
+      font-size: .75rem;
+    }
+
+    .left-foot {
+      color: rgba(255, 255, 255, .25);
+      font-size: .75rem;
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .box {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .box-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.7rem;
+      color: var(--ink);
+      letter-spacing: -.02em;
+      margin-bottom: .3rem;
+    }
+
+    .box-sub {
+      color: var(--ink3);
+      font-size: .88rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: .75rem;
+      font-weight: 500;
+      border: 1px solid;
+      margin-bottom: 1.25rem;
+    }
+
+    .status.ok {
+      background: rgba(46, 212, 122, .1);
+      color: #1a7a4a;
+      border-color: rgba(46, 212, 122, .3);
+    }
+
+    .status.err {
+      background: rgba(255, 71, 87, .1);
+      color: #c0392b;
+      border-color: rgba(255, 71, 87, .3);
+    }
+
+    .status.wait {
+      background: rgba(0, 0, 0, .05);
+      color: var(--ink3);
+      border-color: var(--border);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .dot.pulse {
+      animation: p 1.4s infinite;
+    }
+
+    @keyframes p {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .2
+      }
+    }
+
+    .fg {
+      margin-bottom: .9rem;
+    }
+
+    label {
+      display: block;
+      font-size: .78rem;
+      font-weight: 500;
+      color: var(--ink2);
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: .92rem;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--surface);
+      color: var(--ink);
+      outline: none;
+      transition: border .15s;
+    }
+
+    input:focus {
+      border-color: var(--ink);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: var(--r-sm);
+      background: var(--ink);
+      color: #fff;
+      font-size: .95rem;
+      font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      letter-spacing: -.01em;
+      transition: background .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-login:hover {
+      background: #222;
+    }
+
+    .btn-login:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .err-box {
+      background: rgba(255, 71, 87, .07);
+      border: 1px solid rgba(255, 71, 87, .2);
+      color: var(--red);
+      border-radius: var(--r-sm);
+      padding: 10px 13px;
+      font-size: .83rem;
+      margin-top: .75rem;
+      display: none;
+    }
+
+    .spin {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, .3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: s .6s linear infinite;
+    }
+
+    @keyframes s {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    @media(max-width:700px) {
+      body {
+        grid-template-columns: 1fr;
+      }
+
+      .left {
+        display: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="left">
-  <div class="brand"><div class="brand-dot"></div>POS System</div>
-  <div class="hero">
-    <h1>Modern POS<br>for <em>Sri Lanka</em></h1>
-    <p>Cloud-powered sales, inventory, loyalty and analytics — all in one.</p>
-    <div class="pills">
-      <span class="pill">⚡ Real-time sync</span><span class="pill">📱 Barcode scanner</span>
-      <span class="pill">⭐ Loyalty points</span><span class="pill">🎁 Gift vouchers</span>
-      <span class="pill">📊 PDF reports</span><span class="pill">🌙 Dark mode</span>
-      <span class="pill">📴 Offline mode</span>
+  <div class="left">
+    <div class="brand">
+      <div class="brand-dot"></div>POS System
+    </div>
+    <div class="hero">
+      <h1>Modern POS<br>for <em>Sri Lanka</em></h1>
+      <p>Cloud-powered sales, inventory, loyalty and analytics — all in one.</p>
+      <div class="pills">
+        <span class="pill">⚡ Real-time sync</span><span class="pill">📱 Barcode scanner</span>
+        <span class="pill">⭐ Loyalty points</span><span class="pill">🎁 Gift vouchers</span>
+        <span class="pill">📊 PDF reports</span><span class="pill">🌙 Dark mode</span>
+        <span class="pill">📴 Offline mode</span>
+      </div>
+    </div>
+    <div class="left-foot">POS System by NextGenIT &amp; Lakshan · 2025</div>
+  </div>
+  <div class="right">
+    <div class="box">
+      <div class="box-title">Welcome back</div>
+      <div class="box-sub">Sign in to your POS</div>
+      <div class="status wait" id="st">
+        <div class="dot pulse"></div><span>Checking connection...</span>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" id="em" placeholder="admin@store.com"
+          autocomplete="email" /></div>
+      <div class="fg"><label>Password</label><input type="password" id="pw" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')go()" /></div>
+      <button class="btn-login" id="lb" onclick="go()">Sign in →</button>
+      <div class="err-box" id="eb"></div>
     </div>
   </div>
-  <div class="left-foot">POS System by NextGenIT &amp; Lakshan · 2025</div>
-</div>
-<div class="right">
-  <div class="box">
-    <div class="box-title">Welcome back</div>
-    <div class="box-sub">Sign in to your POS</div>
-    <div class="status wait" id="st"><div class="dot pulse"></div><span>Checking connection...</span></div>
-    <div class="fg"><label>Email</label><input type="email" id="em" placeholder="admin@store.com" autocomplete="email"/></div>
-    <div class="fg"><label>Password</label><input type="password" id="pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')go()"/></div>
-    <button class="btn-login" id="lb" onclick="go()">Sign in →</button>
-    <div class="err-box" id="eb"></div>
-  </div>
-</div>
-<script>
-const SB=window.supabase.createClient('https://uktfqjrzbyycszcjmikz.supabase.co','__ANON_KEY__');
-(async()=>{
-  const {data:{session}}=await SB.auth.getSession();
-  if(session){location.href='pos.html';return;}
-  try{
-    await SB.from('business_profile').select('id').limit(1);
-    document.getElementById('st').className='status ok';
-    document.getElementById('st').innerHTML='<div class="dot"></div><span>Database connected</span>';
-  }catch{
-    document.getElementById('st').className='status err';
-    document.getElementById('st').innerHTML='<div class="dot"></div><span>Connection failed</span>';
-  }
-})();
-async function go(){
-  const em=document.getElementById('em').value.trim();
-  const pw=document.getElementById('pw').value;
-  const lb=document.getElementById('lb');
-  const eb=document.getElementById('eb');
-  eb.style.display='none';
-  if(!em||!pw){eb.textContent='Enter email and password';eb.style.display='block';return;}
-  lb.disabled=true;lb.innerHTML='<div class="spin"></div>Signing in...';
-  const {error}=await SB.auth.signInWithPassword({email:em,password:pw});
-  if(error){eb.textContent=error.message;eb.style.display='block';lb.disabled=false;lb.innerHTML='Sign in →';return;}
-  location.href='pos.html';
-}
-</script>
+  <script>
+    const SB = window.supabase.createClient('https://uktfqjrzbyycszcjmikz.supabase.co', 'sb_publishable_Rz2ePk0KH89QmFPxMg_u-w_sbMFZz3E');
+    (async () => {
+      const { data: { session } } = await SB.auth.getSession();
+      if (session) { location.href = 'pos.html'; return; }
+      try {
+        await SB.from('business_profile').select('id').limit(1);
+        document.getElementById('st').className = 'status ok';
+        document.getElementById('st').innerHTML = '<div class="dot"></div><span>Database connected</span>';
+      } catch {
+        document.getElementById('st').className = 'status err';
+        document.getElementById('st').innerHTML = '<div class="dot"></div><span>Connection failed</span>';
+      }
+    })();
+    async function go() {
+      const em = document.getElementById('em').value.trim();
+      const pw = document.getElementById('pw').value;
+      const lb = document.getElementById('lb');
+      const eb = document.getElementById('eb');
+      eb.style.display = 'none';
+      if (!em || !pw) { eb.textContent = 'Enter email and password'; eb.style.display = 'block'; return; }
+      lb.disabled = true; lb.innerHTML = '<div class="spin"></div>Signing in...';
+      const { error } = await SB.auth.signInWithPassword({ email: em, password: pw });
+      if (error) { eb.textContent = error.message; eb.style.display = 'block'; lb.disabled = false; lb.innerHTML = 'Sign in →'; return; }
+      location.href = 'pos.html';
+    }
+  </script>
 </body>
+
 </html>
