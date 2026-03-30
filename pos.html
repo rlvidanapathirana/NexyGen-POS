@@ -5122,41 +5122,84 @@
       openM('wa-ov');
     }
     function sendWAReceipt() {
-      const num = document.getElementById('wa-num').value.trim().replace(/\D/g, '');
-      if (!num) { toast('Enter mobile number', 'error'); return; }
-      const sym = SYM();
-      // Use lastRcData if available (after sale), else use cart
-      let itemLines, subAmt, bdiscAmt, vdiscAmt, pdiscAmt, netAmt;
-      if (lastRcData) {
-        // After sale — use receipt data
-        const d = lastRcData;
-        itemLines = (d.items || []).map(i => `• ${i.name} x${i.qty || 1} = ${sym} ${parseFloat(i.tot || i.total_price || 0).toFixed(2)}`).join('%0A');
-        subAmt = d.sub || 0; bdiscAmt = d.bdisc || 0; vdiscAmt = d.vdisc || 0; pdiscAmt = d.pdisc || 0; netAmt = d.net || 0;
-        const invoiceNum = d.sale ? '#' + (d.sale.id || '').slice(-10).toUpperCase() : '';
-        const custName = d.custId ? (customers.find(x => x.id === d.custId)?.name || '') : '';
-        const ptsEarned = Math.floor(netAmt / RATIO());
-        const custAfter = d.custId ? customers.find(x => x.id === d.custId) : null;
-        const loyaltyLine = custAfter && ptsEarned > 0 ? `%0A%0A⭐ Loyalty Points Earned: +${ptsEarned}%0ATotal Balance: ${(custAfter.loyalty_points || 0)} pts` : '';
-        const msg = `*${settings.shop_name || 'My Shop'}*%0A${invoiceNum ? invoiceNum + '%0A' : ''}${custName ? 'Customer: ' + encodeURIComponent(custName) + '%0A' : ''}%0AYour receipt:%0A${itemLines}%0A%0ASubtotal: ${sym} ${subAmt.toFixed(2)}${bdiscAmt > 0 ? '%0ADiscount: -' + sym + bdiscAmt.toFixed(2) : ''}${vdiscAmt > 0 ? '%0AVoucher: -' + sym + vdiscAmt.toFixed(2) : ''}${pdiscAmt > 0 ? '%0APoints: -' + sym + pdiscAmt.toFixed(2) : ''}%0A%0A*TOTAL: ${sym} ${netAmt.toFixed(2)}*${loyaltyLine}%0A%0A${encodeURIComponent(settings.receipt_footer || 'Thank you for shopping!')} 🙏`;
-        const waNum = num.startsWith('0') ? '94' + num.slice(1) : num;
-        window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
-      } else {
-        // Pre-sale — use cart
-        const sub = cart.reduce((s, i) => s + i.tot, 0);
-        itemLines = cart.map(i => `• ${i.name} x${i.qty} = ${sym} ${i.tot.toFixed(2)}`).join('%0A');
-        const dv = parseFloat(document.getElementById('bdis').value) || 0;
-        const dt = document.getElementById('bdis-t').value;
-        bdiscAmt = dt === 'pct' ? sub * dv / 100 : Math.min(dv, sub);
-        vdiscAmt = applyVoucherData ? Math.min(applyVoucherData.balance, sub) : 0;
-        pdiscAmt = redeemPtsData ? redeemPtsData.discount : 0;
-        netAmt = Math.max(0, sub - bdiscAmt - vdiscAmt - pdiscAmt);
-        const msg = `*${settings.shop_name || 'My Shop'}*%0A%0AYour receipt:%0A${itemLines}%0A%0ASubtotal: ${sym} ${sub.toFixed(2)}${bdiscAmt > 0 ? '%0ADiscount: -' + sym + bdiscAmt.toFixed(2) : ''}%0A%0A*TOTAL: ${sym} ${netAmt.toFixed(2)}*%0A%0A${encodeURIComponent(settings.receipt_footer || 'Thank you for shopping!')} 🙏`;
-        const waNum = num.startsWith('0') ? '94' + num.slice(1) : num;
-        window.open(`https://wa.me/${waNum}?text=${msg}`, '_blank');
-      }
-      closeM('wa-ov');
-      toast('WhatsApp opened ✓', 'success');
+  const num = document.getElementById('wa-num').value.trim().replace(/\D/g, '');
+  if (!num) { toast('Enter mobile number', 'error'); return; }
+  const sym = SYM();
+  let msg = '';
+
+  if (lastRcData) {
+    // After sale — use receipt data
+    const d = lastRcData;
+    const subAmt = d.sub || 0, bdiscAmt = d.bdisc || 0, vdiscAmt = d.vdisc || 0, pdiscAmt = d.pdisc || 0, netAmt = d.net || 0;
+    const invoiceNum = d.sale ? '#' + (d.sale.id || '').slice(-10).toUpperCase() : '';
+    const custName = d.custId ? (customers.find(x => x.id === d.custId)?.name || '') : '';
+    const ptsEarned = Math.floor(netAmt / RATIO());
+    const custAfter = d.custId ? customers.find(x => x.id === d.custId) : null;
+
+    let lines = [];
+    lines.push(`*${settings.shop_name || 'My Shop'}*`);
+    if (invoiceNum) lines.push(`Invoice: ${invoiceNum}`);
+    if (custName) lines.push(`Customer: ${custName}`);
+    lines.push('');
+    lines.push('Your receipt:');
+
+    (d.items || []).forEach(i => {
+       lines.push(`• ${i.name} x${i.qty || 1} = ${sym} ${parseFloat(i.tot || i.total_price || 0).toFixed(2)}`);
+    });
+
+    lines.push('');
+    lines.push(`Subtotal: ${sym} ${subAmt.toFixed(2)}`);
+    if (bdiscAmt > 0) lines.push(`Discount: -${sym} ${bdiscAmt.toFixed(2)}`);
+    if (vdiscAmt > 0) lines.push(`Voucher: -${sym} ${vdiscAmt.toFixed(2)}`);
+    if (pdiscAmt > 0) lines.push(`Points: -${sym} ${pdiscAmt.toFixed(2)}`);
+    lines.push('');
+    lines.push(`*TOTAL: ${sym} ${netAmt.toFixed(2)}*`);
+
+    if (custAfter && ptsEarned > 0) {
+       lines.push('');
+       lines.push(`⭐ Loyalty Points Earned: +${ptsEarned}`);
+       lines.push(`Total Balance: ${custAfter.loyalty_points || 0} pts`);
     }
+
+    lines.push('');
+    lines.push(`${settings.receipt_footer || 'Thank you for shopping!'} 🙏`);
+
+    msg = lines.join('\n');
+  } else {
+    // Pre-sale — use cart
+    const sub = cart.reduce((s, i) => s + i.tot, 0);
+    const dv = parseFloat(document.getElementById('bdis').value) || 0;
+    const dt = document.getElementById('bdis-t').value;
+    const bdiscAmt = dt === 'pct' ? sub * dv / 100 : Math.min(dv, sub);
+    const vdiscAmt = applyVoucherData ? Math.min(applyVoucherData.balance, sub) : 0;
+    const pdiscAmt = redeemPtsData ? redeemPtsData.discount : 0;
+    const netAmt = Math.max(0, sub - bdiscAmt - vdiscAmt - pdiscAmt);
+
+    let lines = [];
+    lines.push(`*${settings.shop_name || 'My Shop'}*`);
+    lines.push('');
+    lines.push('Your receipt:');
+    cart.forEach(i => {
+        lines.push(`• ${i.name} x${i.qty} = ${sym} ${i.tot.toFixed(2)}`);
+    });
+    lines.push('');
+    lines.push(`Subtotal: ${sym} ${sub.toFixed(2)}`);
+    if (bdiscAmt > 0) lines.push(`Discount: -${sym} ${bdiscAmt.toFixed(2)}`);
+    lines.push('');
+    lines.push(`*TOTAL: ${sym} ${netAmt.toFixed(2)}*`);
+    lines.push('');
+    lines.push(`${settings.receipt_footer || 'Thank you for shopping!'} 🙏`);
+
+    msg = lines.join('\n');
+  }
+
+  const waNum = num.startsWith('0') ? '94' + num.slice(1) : num;
+  // Properly encode the entire message for the URL
+  window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, '_blank');
+  
+  closeM('wa-ov');
+  toast('WhatsApp opened ✓', 'success');
+}
 
     // ── VOICE BILLING (Web Speech API)
     let voiceRecog = null, voiceActive = false;
